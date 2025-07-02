@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADBOSS ADVANCEX - HACKER INTRO</title>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            color: #0f0; /* Green text for hacker style */
+        }
+
+        .intro-container {
+            font-size: 3em;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #0f0; /* Blinking cursor */
+            animation: typing 4s steps(25, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #0f0; }
+        }
+
+        /* Optional: Glitch effect */
+        .glitch {
+            animation: glitch-effect 0.5s infinite alternate;
+        }
+
+        @keyframes glitch-effect {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="intro-container" id="hackerText"></div>
+
+    <script>
+        const text = "ADBOSS ADVANCEX";
+        let i = 0;
+        const speed = 150; // typing speed in milliseconds
+        const hackerTextElement = document.getElementById('hackerText');
+
+        function typeWriter() {
+            if (i < text.length) {
+                hackerTextElement.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            } else {
+                // Once typing is complete, add a glitch effect
+                hackerTextElement.classList.add('glitch');
+            }
+        }
+
+        // Start the typing effect when the page loads
+        window.onload = typeWriter;
+    </script>
+</body>
+</html>
