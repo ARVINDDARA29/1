@@ -6,6 +6,9 @@
     <title>ADBOSS 2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Google AdSense Script - Added as requested -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7288140949759628"
+            crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -576,6 +579,18 @@
                 <p id="user-coins" class="text-5xl font-bold text-indigo-800 mt-2">0</p>
             </div>
 
+            <!-- AdSense Ad Unit for Home Screen -->
+            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
+            <ins class="adsbygoogle"
+                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
+                 data-ad-client="ca-pub-7288140949759628"
+                 data-ad-slot="2166020331"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
             <button id="withdrawal-btn" class="button-primary">निकासी</button>
             <button id="scoreboard-btn" class="button-secondary mt-4">स्कोरबोर्ड</button>
 
@@ -598,6 +613,19 @@
             </button>
             <h2 class="text-3xl font-bold text-gray-800 mb-6 gradient-text">स्कोरबोर्ड</h2>
             <p id="my-rank-display" class="text-lg text-gray-700 mb-4">आपकी रैंक: लोडिंग...</p>
+            
+            <!-- AdSense Ad Unit for Scoreboard Screen -->
+            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
+            <ins class="adsbygoogle"
+                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
+                 data-ad-client="ca-pub-7288140949759628"
+                 data-ad-slot="2166020331"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
             <div id="scoreboard-list-container" class="scoreboard-list">
                 <!-- स्कोरबोर्ड आइटम यहां डायनेमिक रूप से लोड होंगे -->
                 <p class="text-gray-500">लोड हो रहा है...</p>
@@ -614,6 +642,18 @@
             <h2 class="text-3xl font-bold text-gray-800 mb-6 gradient-text">सिक्के कमाएँ</h2>
             <p class="text-lg text-gray-700 mb-4">विज्ञापन देखकर सिक्के कमाएँ!</p>
             <button id="show-ad-btn" class="button-primary">विज्ञापन देखें</button>
+
+            <!-- AdSense Ad Unit for Earn Screen -->
+            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
+            <ins class="adsbygoogle"
+                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
+                 data-ad-client="ca-pub-7288140949759628"
+                 data-ad-slot="2166020331"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
 
         <!-- Color Prediction Game Screen -->
@@ -825,6 +865,7 @@
         const navProfile = document.getElementById('nav-profile');
         const currentTimeSpan = document.getElementById('current-time');
         const accountAgeBtn = document.getElementById('account-age-btn');
+        const containerElement = document.querySelector('.container'); // Get the main container
 
         const profileScreen = document.getElementById('profile-screen');
         const profileNameInput = document.getElementById('profile-name-input');
@@ -934,7 +975,7 @@
                 const previousScreenElement = document.getElementById(previousScreenId);
                 if (previousScreenElement) {
                     // If going back from game screen, stop game loop
-                    if (currentActiveScreen.id === 'color-prediction-game-screen') {
+                    if (document.querySelector('.screen.active').id === 'color-prediction-game-screen') {
                         stopGameLoop();
                     }
                     showScreen(previousScreenElement);
@@ -1112,7 +1153,7 @@
 
             // Ensure Firebase is ready and firebaseAuthUid is available
             if (!firebaseReady || !firebaseAuthUid) {
-                showMessage("Firebase प्रमाणीकरण अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें। सुनिश्चित करें कि आपने Firebase कंसोल में 'Anonymous' साइन-इन विधि को सक्षम किया है।");
+                showMessage("Firebase प्रमाणीकरण अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें। सुनिश्चित करें कि आपने Firebase कंसोल में 'Anonymous' साइन-in विधि को सक्षम किया है।");
                 return;
             }
 
@@ -1289,7 +1330,7 @@
                     document.execCommand('copy');
                     showMessage("उपयोगकर्ता ID कॉपी हो गई!");
                 } catch (err) {
-                    console.error('Failed to copy to clipboard:', err);
+                    console.error('क्लिपबोर्ड पर कॉपी करने में विफल:', err);
                     showMessage("ID कॉपी करने में विफल। कृपया मैन्युअल रूपally कॉपी करें।");
                 }
                 document.body.removeChild(textArea);
@@ -1572,6 +1613,10 @@
 
         // लॉगआउट फंक्शन
         async function handleLogout() {
+            // Hide main container and bottom nav immediately
+            if (containerElement) containerElement.style.display = 'none';
+            if (bottomNav) bottomNav.classList.add('hidden');
+            
             showLoadingScreen(); // Show loading screen immediately on logout
             try {
                 await signOut(auth); // Sign out from Firebase Auth
@@ -1585,15 +1630,20 @@
                 
                 // Clear screen history and stop time updates
                 screenHistory = [];
-                stopCurrentTimeUpdate();
+                stopGameLoop(); // Stop game loop if active
+                stopCurrentTimeUpdate(); // Stop time update if active
 
-                // Force a full page reload to reset the app completely
-                location.reload(); 
+                // Force a full page reload to reset the app completely after a short delay
+                setTimeout(() => {
+                    location.reload(); 
+                }, 300); // 300ms delay to allow loading screen to render
 
             } catch (error) {
                 console.error("Error logging out:", error);
                 showMessage(`लॉगआउट में त्रुटि: ${error.message}`);
                 hideLoadingScreen(); // Ensure loading screen is hidden if an error occurs
+                // If an error occurs, bring back the UI (if it was hidden)
+                if (containerElement) containerElement.style.display = 'flex';
             }
         }
 
@@ -1619,13 +1669,17 @@
 
             try {
                 const usersRef = collection(db, "users");
-                const q = query(usersRef, orderBy("coins", "desc")); // सिक्कों के आधार पर अवरोही क्रम में सॉर्ट करें
+                // orderBy("coins", "desc") के लिए Firestore कंसोल में एक इंडेक्स बनाना सुनिश्चित करें
+                const q = query(usersRef, orderBy("coins", "desc")); 
 
                 const querySnapshot = await getDocs(q);
                 const users = [];
                 querySnapshot.forEach((doc) => {
                     users.push({ id: doc.id, ...doc.data() });
                 });
+
+                // Sort users by coins in descending order (already done by query, but good for safety)
+                users.sort((a, b) => b.coins - a.coins);
 
                 scoreboardListContainer.innerHTML = ''; // Clear existing content
 
@@ -1656,12 +1710,19 @@
                 if (myRank !== -1) {
                     myRankDisplay.textContent = `आपकी रैंक: ${myRank} / ${users.length}`;
                 } else {
-                    myRankDisplay.textContent = 'आपकी रैंक: सूची में नहीं';
+                    // This case should ideally not happen if the current user is in the database
+                    myRankDisplay.textContent = 'आपकी रैंक: सूची में नहीं (त्रुटि)';
+                    console.warn("Current user not found in scoreboard list, even though logged in.");
                 }
 
             } catch (error) {
                 console.error("स्कोरबोर्ड लोड करने में त्रुटि:", error);
-                showMessage(`स्कोरबोर्ड लोड करने में त्रुटि: ${error.message}`);
+                // यदि 'permission-denied' या इंडेक्स गायब होने की त्रुटि है
+                if (error.code === 'permission-denied' || (error.code === 'FirebaseError' && error.message.includes('Missing or insufficient permissions'))) {
+                    showMessage("स्कोरबोर्ड लोड करने में त्रुटि: Firebase अनुमतियाँ अपर्याप्त हैं या 'coins' फ़ील्ड पर एक इंडेक्स गायब है। कृपया Firebase कंसोल में Firestore सुरक्षा नियम और इंडेक्स सेटिंग्स की जाँच करें।");
+                } else {
+                    showMessage(`स्कोरबोर्ड लोड करने में त्रुटि: ${error.message}`);
+                }
                 scoreboardListContainer.innerHTML = '<p class="text-red-500">स्कोरबोर्ड लोड करने में त्रुटि।</p>';
                 myRankDisplay.textContent = 'आपकी रैंक: त्रुटि';
             }
@@ -1697,11 +1758,12 @@
             gameStatusMessage.textContent = "रंग का अनुमान लगाएँ!";
             colorCircle.classList.remove('green', 'red');
             colorCircle.textContent = ''; // रंग प्रकट होने से पहले टेक्स्ट साफ़ करें
-            betAmountInput.value = '';
+            betAmountInput.value = '1'; // डिफ़ॉल्ट शर्त 1 सिक्का
             betAmountInput.disabled = false;
             betGreenBtn.disabled = false;
             betRedBtn.disabled = false;
             isBettingOpen = true; // सट्टेबाजी खुली है
+            selectedBetColor = null; // प्रत्येक नए दौर में चयनित शर्त रीसेट करें
 
             gameInterval = setInterval(() => {
                 gameCountdown--;
@@ -1736,8 +1798,12 @@
             betGreenBtn.disabled = true;
             betRedBtn.disabled = true;
 
-            // शर्त को संसाधित करें
-            await processBet(revealedColor);
+            // केवल तभी शर्त को संसाधित करें जब कोई रंग चुना गया हो
+            if (selectedBetColor !== null) {
+                await processBet(revealedColor);
+            } else {
+                gameStatusMessage.textContent += " आपने कोई शर्त नहीं लगाई।"; // गेम स्टेटस में एक सूक्ष्म संदेश जोड़ें
+            }
 
             // 5 सेकंड के बाद गेम रीसेट करें
             colorChangeTimeout = setTimeout(() => {
@@ -1749,18 +1815,20 @@
         async function processBet(revealedColor) {
             const betAmount = parseInt(betAmountInput.value);
 
-            if (selectedBetColor === null) {
-                showMessage("आपने कोई रंग नहीं चुना है।");
-                return;
-            }
+            // यह फ़ंक्शन अब मानता है कि selectedBetColor null नहीं है
+            // क्योंकि इसे केवल revealColor में ही बुलाया जाता है यदि selectedBetColor null नहीं है।
 
             if (isNaN(betAmount) || betAmount <= 0) {
-                showMessage("कृपया एक वैध शर्त राशि दर्ज करें।");
+                // यह मामला आदर्श रूप से इनपुट/बटन को अक्षम करके रोका जाना चाहिए
+                // शर्त लगाने से पहले यदि betAmount अमान्य है।
+                // अभी के लिए, संदेश रखें, लेकिन यह दुर्लभ होना चाहिए।
+                // showMessage("कृपया एक वैध शर्त राशि दर्ज करें।"); // पॉपअप हटा दिया गया
                 return;
             }
 
             if (currentUserCoins < betAmount) {
-                showMessage("आपके पास इस शर्त के लिए पर्याप्त सिक्के नहीं हैं।");
+                // showMessage("आपके पास इस शर्त के लिए पर्याप्त सिक्के नहीं हैं।"); // पॉपअप हटा दिया गया
+                gameStatusMessage.textContent = "आपके पास इस शर्त के लिए पर्याप्त सिक्के नहीं हैं।";
                 return;
             }
 
@@ -1796,7 +1864,7 @@
             colorCircle.classList.remove('green', 'red');
             colorCircle.textContent = '';
             gameStatusMessage.textContent = "रंग का अनुमान लगाएँ!";
-            betAmountInput.value = '';
+            betAmountInput.value = '1'; // डिफ़ॉल्ट शर्त 1 सिक्का
             betAmountInput.disabled = false;
             betGreenBtn.disabled = false;
             betRedBtn.disabled = false;
@@ -1826,18 +1894,36 @@
         // कलर प्रेडिक्शन गेम इवेंट लिसनर्स
         betGreenBtn.addEventListener('click', () => {
             if (isBettingOpen) {
+                const betAmount = parseInt(betAmountInput.value);
+                if (isNaN(betAmount) || betAmount <= 0) {
+                    gameStatusMessage.textContent = "कृपया शर्त लगाने के लिए एक वैध राशि दर्ज करें।";
+                    return;
+                }
+                if (currentUserCoins < betAmount) {
+                    gameStatusMessage.textContent = "आपके पास इस शर्त के लिए पर्याप्त सिक्के नहीं हैं।";
+                    return;
+                }
                 selectedBetColor = 'green';
-                gameStatusMessage.textContent = "आपने हरा चुना है।";
+                gameStatusMessage.textContent = `आपने हरा चुना है (${betAmount} सिक्के)।`;
             } else {
-                showMessage("शर्त लगाने का समय समाप्त हो गया है।");
+                gameStatusMessage.textContent = "शर्त लगाने का समय समाप्त हो गया है।";
             }
         });
         betRedBtn.addEventListener('click', () => {
             if (isBettingOpen) {
+                const betAmount = parseInt(betAmountInput.value);
+                if (isNaN(betAmount) || betAmount <= 0) {
+                    gameStatusMessage.textContent = "कृपया शर्त लगाने के लिए एक वैध राशि दर्ज करें।";
+                    return;
+                }
+                if (currentUserCoins < betAmount) {
+                    gameStatusMessage.textContent = "आपके पास इस शर्त के लिए पर्याप्त सिक्के नहीं हैं।";
+                    return;
+                }
                 selectedBetColor = 'red';
-                gameStatusMessage.textContent = "आपने लाल चुना है।";
+                gameStatusMessage.textContent = `आपने लाल चुना है (${betAmount} सिक्के)।`;
             } else {
-                showMessage("शर्त लगाने का समय समाप्त हो गया है।");
+                gameStatusMessage.textContent = "शर्त लगाने का समय समाप्त हो गया है।";
             }
         });
 
