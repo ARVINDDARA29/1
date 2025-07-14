@@ -6,9 +6,6 @@
     <title>ADBOSS 2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Google AdSense Script - Added as requested -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7288140949759628"
-            crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -45,7 +42,8 @@
         #withdrawal-scheme-screen.screen.active,
         #upi-input-screen.screen.active,
         #scoreboard-screen.screen.active, /* स्कोरबोर्ड स्क्रीन के लिए */
-        #color-prediction-game-screen.screen.active { /* कलर प्रेडिक्शन गेम स्क्रीन के लिए */
+        #color-prediction-game-screen.screen.active, /* कलर प्रेडिक्शन गेम स्क्रीन के लिए */
+        #chat-screen.screen.active { /* चैट स्क्रीन के लिए */
             background: linear-gradient(135deg, #e0e7ff, #c7d2fe); /* हल्का नीला-बैंगनी ग्रेडिएंट */
             border-radius: 1.5rem; /* कंटेनर के समान गोल कोने */
             padding: 2.5rem; /* कंटेनर के समान पैडिंग */
@@ -56,7 +54,8 @@
         #main-screen.screen.active,
         #new-user-screen.screen.active,
         #have-account-screen.screen.active,
-        #earn-screen.screen.active {
+        #earn-screen.screen.active,
+        #message-intro-screen.screen.active { /* मैसेज इंट्रो स्क्रीन के लिए */
             background-color: #ffffff;
         }
 
@@ -105,7 +104,7 @@
             transform: translateY(-3px) scale(1.02); /* थोड़ा ऊपर और बड़ा करें */
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1); /* गहरी छाया */
         }
-        input[type="text"] {
+        input[type="text"], input[type="number"] {
             border: 1px solid #d1d5db; /* ग्रे 300 */
             border-radius: 0.75rem;
             padding: 0.75rem 1rem;
@@ -115,7 +114,7 @@
             font-size: 1rem;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        input[type="text"]:focus {
+        input[type="text"]:focus, input[type="number"]:focus {
             outline: none;
             border-color: #6366f1; /* इंडिगो 500 */
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3); /* फोकस रिंग */
@@ -217,10 +216,10 @@
         }
 
         /* इंट्रो स्क्रीन के लिए विशेष एनिमेशन */
-        #intro-screen h1 {
+        #intro-screen h1, #message-intro-screen h1 {
             animation: fadeInScale 1.5s ease-out forwards;
         }
-        #intro-screen p {
+        #intro-screen p, #message-intro-screen p {
             animation: fadeIn 2s ease-out forwards;
             animation-delay: 0.5s;
             opacity: 0; /* शुरुआत में छिपा हुआ */
@@ -521,6 +520,72 @@
             color: #4f46e5;
             margin-bottom: 1rem;
         }
+
+        /* Chat Screen Styles */
+        #chat-screen {
+            justify-content: flex-start; /* Align content to top */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            max-height: calc(100vh - 12rem); /* Adjust for nav and header */
+            overflow-y: auto; /* Make chat scrollable */
+        }
+        .chat-messages-container {
+            width: 100%;
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            max-height: 60vh; /* Limit height for messages */
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .chat-message {
+            background-color: #ffffff;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            text-align: left;
+            word-wrap: break-word; /* Ensure long words wrap */
+        }
+        .chat-message.own-message {
+            background-color: #e0e7ff; /* Light indigo for own messages */
+            align-self: flex-end; /* Align own messages to the right */
+        }
+        .chat-message .sender-name {
+            font-weight: 600;
+            color: #4f46e5; /* Indigo for sender name */
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        .chat-message .message-text {
+            color: #374151; /* Dark gray for message text */
+            font-size: 1rem;
+        }
+        .chat-input-area {
+            width: 100%;
+            max-width: 25rem;
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .chat-input-area input {
+            flex-grow: 1;
+            margin-bottom: 0; /* Override default margin */
+        }
+        .chat-input-area button {
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            background-color: #4f46e5;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .chat-input-area button:hover {
+            background-color: #4338ca;
+        }
     </style>
 </head>
 <body>
@@ -579,18 +644,6 @@
                 <p id="user-coins" class="text-5xl font-bold text-indigo-800 mt-2">0</p>
             </div>
 
-            <!-- AdSense Ad Unit for Home Screen -->
-            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
-            <ins class="adsbygoogle"
-                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
-                 data-ad-client="ca-pub-7288140949759628"
-                 data-ad-slot="2166020331"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-
             <button id="withdrawal-btn" class="button-primary">निकासी</button>
             <button id="scoreboard-btn" class="button-secondary mt-4">स्कोरबोर्ड</button>
 
@@ -614,18 +667,6 @@
             <h2 class="text-3xl font-bold text-gray-800 mb-6 gradient-text">स्कोरबोर्ड</h2>
             <p id="my-rank-display" class="text-lg text-gray-700 mb-4">आपकी रैंक: लोडिंग...</p>
             
-            <!-- AdSense Ad Unit for Scoreboard Screen -->
-            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
-            <ins class="adsbygoogle"
-                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
-                 data-ad-client="ca-pub-7288140949759628"
-                 data-ad-slot="2166020331"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-
             <div id="scoreboard-list-container" class="scoreboard-list">
                 <!-- स्कोरबोर्ड आइटम यहां डायनेमिक रूप से लोड होंगे -->
                 <p class="text-gray-500">लोड हो रहा है...</p>
@@ -642,18 +683,6 @@
             <h2 class="text-3xl font-bold text-gray-800 mb-6 gradient-text">सिक्के कमाएँ</h2>
             <p class="text-lg text-gray-700 mb-4">विज्ञापन देखकर सिक्के कमाएँ!</p>
             <button id="show-ad-btn" class="button-primary">विज्ञापन देखें</button>
-
-            <!-- AdSense Ad Unit for Earn Screen -->
-            <!-- Note: AdSense ads may not fully render or function within this sandboxed environment. -->
-            <ins class="adsbygoogle"
-                 style="display:block; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; max-width: 300px; height: 250px;"
-                 data-ad-client="ca-pub-7288140949759628"
-                 data-ad-slot="2166020331"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
         </div>
 
         <!-- Color Prediction Game Screen -->
@@ -770,6 +799,45 @@
 
             <button id="logout-btn" class="button-primary bg-red-500 hover:bg-red-600">लॉगआउट</button>
         </div>
+
+        <!-- Arvind Dara Intro Screen -->
+        <div id="message-intro-screen" class="screen">
+            <button class="back-button" onclick="window.goBack()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+            <h1 class="text-5xl font-bold text-indigo-600 mb-4 gradient-text">अरविन्द दारा</h1>
+            <p class="text-xl text-gray-700 mb-8">आपका स्वागत है!</p>
+            <p class="text-lg text-gray-600 text-center">
+                मैं अरविन्द दारा हूँ, इस एप्लिकेशन का निर्माता।
+                मुझे खुशी है कि आप यहाँ हैं!
+                यह चैट सिस्टम आपको अन्य उपयोगकर्ताओं से जुड़ने और
+                विचार साझा करने की अनुमति देता है।
+                कृपया सम्मानजनक और सहायक रहें।
+            </p>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chat-screen" class="screen">
+            <button class="back-button" onclick="window.goBack()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 gradient-text">चैट</h2>
+            
+            <div id="chat-messages-container" class="chat-messages-container">
+                <!-- Chat messages will be loaded here -->
+                <p class="text-gray-500 text-center">संदेश लोड हो रहे हैं...</p>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="new-message-input" placeholder="एक संदेश लिखें..." class="flex-grow">
+                <button id="send-message-btn">भेजें</button>
+            </div>
+        </div>
+
     </div>
 
     <div id="message-box" class="message-box">
@@ -796,6 +864,12 @@
             </svg>
             <span>गेम</span>
         </div>
+        <div id="nav-message" class="nav-item"> <!-- New Message Nav Item -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H16.5m2.25 6.75a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.103l-1.742-.48a1.125 1.125 0 01-.62-.915V6.75a1.125 1.125 0 00-1.244-1.103l-1.25-.217a1.125 1.125 0 00-1.071.188L7.5 7.5M2.25 12h2.25m0 0l1.125 1.125M4.5 12V7.5m.75 4.5V7.5m0 4.5l-1.125 1.125M12 2.25h.75c.621 0 1.125.504 1.125 1.125V4.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375M12 2.25V4.5m.75 0h.375c.621 0 1.125.504 1.125 1.125v.375M12 2.25V4.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375M12 2.25V4.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375M12 2.25V4.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375M12 2.25V4.5m-1.5 0h.375c.621 0 1.125.504 1.125 1.125v.375" />
+            </svg>
+            <span>संदेश</span>
+        </div>
         <div id="nav-profile" class="nav-item">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -814,13 +888,12 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, updateDoc, query, where, onSnapshot, addDoc, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
 
         // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC3faZ16ZTsIUBEfI9dl55RnDklVeWIHts",
             authDomain: "arvind-dara.firebaseapp.com",
-            projectId: "arvind-dara",
+            projectId: "arvind-dara", // Corrected projectId
             storageBucket: "arvind-dara.firebasestorage.app",
             messagingSenderId: "341922555843",
             appId: "1:341922555843:web:cefd0e44e5d8afae4fbf76",
@@ -831,7 +904,6 @@
         let app;
         let db;
         let auth;
-        let analytics;
         let firebaseAuthUid = null; // Firebase Auth UID (can be anonymous and change on refresh)
         let applicationUserId = null; // This is the ID we save in localStorage and use in Firestore
         let currentUserName = "उपयोगकर्ता"; // To store the current user's name
@@ -862,6 +934,7 @@
         const navHome = document.getElementById('nav-home');
         const navEarn = document.getElementById('nav-earn');
         const navGame = document.getElementById('nav-game'); // New game nav item
+        const navMessage = document.getElementById('nav-message'); // New message nav item
         const navProfile = document.getElementById('nav-profile');
         const currentTimeSpan = document.getElementById('current-time');
         const accountAgeBtn = document.getElementById('account-age-btn');
@@ -902,6 +975,13 @@
         const betAmountInput = document.getElementById('bet-amount-input');
         const betGreenBtn = document.getElementById('bet-green-btn');
         const betRedBtn = document.getElementById('bet-red-btn');
+
+        // Messaging System DOM Elements
+        const messageIntroScreen = document.getElementById('message-intro-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const chatMessagesContainer = document.getElementById('chat-messages-container');
+        const newMessageInput = document.getElementById('new-message-input');
+        const sendMessageBtn = document.getElementById('send-message-btn');
 
         let timeUpdateInterval; // Interval ID for time update
 
@@ -945,7 +1025,7 @@
             screenToShowElement.classList.add('active');
 
             // Show/hide bottom nav
-            if (['home-screen', 'earn-screen', 'profile-screen', 'scoreboard-screen', 'color-prediction-game-screen'].includes(screenToShowElement.id)) {
+            if (['home-screen', 'earn-screen', 'profile-screen', 'scoreboard-screen', 'color-prediction-game-screen', 'chat-screen'].includes(screenToShowElement.id)) {
                 bottomNav.classList.remove('hidden');
                 if (screenToShowElement.id === 'home-screen') {
                     startCurrentTimeUpdate();
@@ -1024,7 +1104,6 @@
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-                analytics = getAnalytics(app); // Initialize Analytics
 
                 // Listen for authentication state changes to get the current Firebase Auth UID
                 onAuthStateChanged(auth, async (user) => {
@@ -1248,6 +1327,7 @@
             navHome.classList.add('active');
             navEarn.classList.remove('active');
             navGame.classList.remove('active'); // Deactivate game
+            navMessage.classList.remove('active'); // Deactivate message
             navProfile.classList.remove('active'); // Deactivate Profile
             // Update "You Old" button
             if (userCreatedAt) {
@@ -1500,6 +1580,7 @@
             navHome.classList.remove('active');
             navEarn.classList.remove('active');
             navGame.classList.remove('active'); // Deactivate game
+            navMessage.classList.remove('active'); // Deactivate message
         }
 
         // नाम अपडेट करने के लिए फंक्शन
@@ -1662,6 +1743,7 @@
             navHome.classList.remove('active');
             navEarn.classList.remove('active');
             navGame.classList.remove('active');
+            navMessage.classList.remove('active'); // Deactivate message
             navProfile.classList.remove('active');
 
             scoreboardListContainer.innerHTML = '<p class="text-gray-500">लोड हो रहा है...</p>';
@@ -1742,6 +1824,7 @@
             navGame.classList.add('active');
             navHome.classList.remove('active');
             navEarn.classList.remove('active');
+            navMessage.classList.remove('active'); // Deactivate message
             navProfile.classList.remove('active');
             
             gameUserName.textContent = currentUserName;
@@ -1872,6 +1955,110 @@
             selectedBetColor = null;
         }
 
+        // अरविंद दारा इंट्रो स्क्रीन दिखाने के लिए फंक्शन
+        function showMessageIntroScreen() {
+            if (!firebaseReady || !firebaseAuthUid) {
+                showMessage("Firebase प्रमाणीकरण अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें। सुनिश्चित करें कि आपने Firebase कंसोल में 'Anonymous' साइन-in विधि को सक्षम किया है।");
+                return;
+            }
+            if (!applicationUserId) {
+                showMessage("संदेश देखने के लिए कृपया लॉग इन करें या एक नया खाता बनाएँ।");
+                return;
+            }
+            showScreen(messageIntroScreen);
+            navMessage.classList.add('active');
+            navHome.classList.remove('active');
+            navEarn.classList.remove('active');
+            navGame.classList.remove('active');
+            navProfile.classList.remove('active');
+
+            // 3 सेकंड के बाद चैट स्क्रीन पर स्विच करें
+            setTimeout(() => {
+                showChatScreen();
+            }, 3000);
+        }
+
+        // चैट स्क्रीन दिखाने और संदेश लोड करने के लिए फंक्शन
+        function showChatScreen() {
+            if (!firebaseReady || !firebaseAuthUid) {
+                showMessage("Firebase प्रमाणीकरण अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें। सुनिश्चित करें कि आपने Firebase कंसोल में 'Anonymous' साइन-in विधि को सक्षम किया है।");
+                return;
+            }
+            if (!applicationUserId) {
+                showMessage("चैट देखने के लिए कृपया लॉग इन करें या एक नया खाता बनाएँ।");
+                return;
+            }
+            showScreen(chatScreen);
+            navMessage.classList.add('active');
+            navHome.classList.remove('active');
+            navEarn.classList.remove('active');
+            navGame.classList.remove('active');
+            navProfile.classList.remove('active');
+
+            // Firestore से संदेशों को वास्तविक समय में लोड करें
+            const q = query(collection(db, "chatMessages"), orderBy("timestamp", "asc"));
+            onSnapshot(q, (snapshot) => {
+                chatMessagesContainer.innerHTML = ''; // Clear existing messages
+                snapshot.forEach((doc) => {
+                    const messageData = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('chat-message');
+                    if (messageData.userId === applicationUserId) {
+                        messageElement.classList.add('own-message');
+                    }
+                    messageElement.innerHTML = `
+                        <div class="sender-name">${messageData.userName || 'अज्ञात उपयोगकर्ता'}</div>
+                        <div class="message-text">${messageData.messageText}</div>
+                    `;
+                    chatMessagesContainer.appendChild(messageElement);
+                });
+                // स्क्रॉल टू बॉटम
+                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+            }, (error) => {
+                console.error("चैट संदेश लोड करने में त्रुटि:", error);
+                if (error.code === 'permission-denied' || (error.code === 'FirebaseError' && error.message.includes('Missing or insufficient permissions'))) {
+                    chatMessagesContainer.innerHTML = '<p class="text-red-500 text-center">संदेश लोड करने में त्रुटि: Firebase अनुमतियाँ अपर्याप्त हैं। कृपया सुनिश्चित करें कि आपके Firestore सुरक्षा नियम सही ढंग से सेट और प्रकाशित हैं।</p>';
+                } else {
+                    chatMessagesContainer.innerHTML = `<p class="text-red-500 text-center">संदेश लोड करने में त्रुटि: ${error.message}</p>`;
+                }
+            });
+        }
+
+        // संदेश भेजने के लिए फंक्शन
+        async function sendMessage() {
+            if (!firebaseReady || !firebaseAuthUid) {
+                showMessage("Firebase प्रमाणीकरण अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें। सुनिश्चित करें कि आपने Firebase कंसोल में 'Anonymous' साइन-in विधि को सक्षम किया है।");
+                return;
+            }
+            const messageText = newMessageInput.value.trim();
+            if (!messageText) {
+                return; // खाली संदेश न भेजें
+            }
+
+            if (!db || !applicationUserId) {
+                showMessage("Firebase अभी तैयार नहीं है। कृपया कुछ देर प्रतीक्षा करें और पुनः प्रयास करें।");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "chatMessages"), {
+                    userId: applicationUserId,
+                    userName: currentUserName,
+                    messageText: messageText,
+                    timestamp: new Date().toISOString(), // ISO string for consistent sorting
+                    firebaseAuthUid: firebaseAuthUid
+                });
+                newMessageInput.value = ''; // संदेश भेजने के बाद इनपुट साफ़ करें
+            } catch (error) {
+                console.error("संदेश भेजने में त्रुटि:", error);
+                if (error.code === 'permission-denied' || (error.code === 'FirebaseError' && error.message.includes('Missing or insufficient permissions'))) {
+                    showMessage("संदेश भेजने में त्रुटि: Firebase अनुमतियाँ अपर्याप्त हैं। कृपया सुनिश्चित करें कि आपके Firestore सुरक्षा नियम सही ढंग से सेट और प्रकाशित हैं।");
+                } else {
+                    showMessage(`संदेश भेजने में त्रुटि: ${error.message}`);
+                }
+            }
+        }
+
 
         // इवेंट लिसनर्स
         document.getElementById('have-account-btn').addEventListener('click', () => {
@@ -1927,6 +2114,13 @@
             }
         });
 
+        // मैसेजिंग सिस्टम इवेंट लिसनर्स
+        sendMessageBtn.addEventListener('click', sendMessage);
+        newMessageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
 
         // प्रोफ़ाइल स्क्रीन के लिए इवेंट लिसनर्स
         saveNameBtn.addEventListener('click', updateUserName);
@@ -1941,6 +2135,7 @@
                 navHome.classList.add('active');
                 navEarn.classList.remove('active');
                 navGame.classList.remove('active');
+                navMessage.classList.remove('active');
                 navProfile.classList.remove('active');
             } else {
                 showMessage(" कृपया लॉग इन करें या एक नया खाता बनाएँ।");
@@ -1953,6 +2148,7 @@
                 navEarn.classList.add('active');
                 navHome.classList.remove('active');
                 navGame.classList.remove('active');
+                navMessage.classList.remove('active');
                 navProfile.classList.remove('active');
             } else {
                 showMessage(" कृपया लॉग इन करें या एक नया खाता बनाएँ।");
@@ -1962,6 +2158,14 @@
         navGame.addEventListener('click', () => { // New game nav item click
             if (applicationUserId) {
                 showColorPredictionGameScreen();
+            } else {
+                showMessage(" कृपया लॉग इन करें या एक नया खाता बनाएँ।");
+            }
+        });
+
+        navMessage.addEventListener('click', () => { // New message nav item click
+            if (applicationUserId) {
+                showMessageIntroScreen();
             } else {
                 showMessage(" कृपया लॉग इन करें या एक नया खाता बनाएँ।");
             }
