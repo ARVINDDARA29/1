@@ -3,178 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub AI Image Generator (Single File - Insecure Example)</title>
+    <title>AI Image Generator</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bytez.js library from GitHub via jsDelivr CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/expoint/bytez.js/dist/index.umd.js"></script>
+
     <style>
+        /* Custom styles */
         body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Inter', sans-serif;
         }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 600px;
+        /* Loader ke liye animation */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
+        .loader {
+            animation: spin 1s linear infinite;
         }
-        p {
-            margin-bottom: 30px;
-            color: #555;
-        }
-        input[type="text"] {
-            padding: 12px;
-            width: calc(100% - 150px);
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            padding: 12px 25px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        #loading {
-            display: none;
-            margin-top: 20px;
-            color: #777;
-            font-style: italic;
-        }
-        #image-container {
-            margin-top: 30px;
-            border: 1px solid #eee;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #f9f9f9;
-        }
-        #image-container img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        .error-message {
-            color: #e74c3c;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        .warning-message {
-            color: orange;
-            margin-top: 20px;
-            font-weight: bold;
-            border: 1px solid orange;
-            padding: 10px;
-            border-radius: 5px;
+        /* Custom focus ring color */
+        .focus-ring-violet {
+            --tw-ring-color: #7c3aed;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>AI इमेज जेनरेटर</h1>
-        <p>एक प्रॉम्प्ट दर्ज करें और AI को एक छवि बनाने दें!</p>
-        <div class="warning-message">
-            **चेतावनी:** यह उदाहरण सुरक्षा के लिए नहीं है। आपकी API कुंजी सार्वजनिक रूप से दिखाई देगी। इसे प्रोडक्शन में इस्तेमाल न करें!
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
+        <div class="p-6 md:p-8">
+            <header class="text-center mb-6">
+                <h1 class="text-3xl md:text-4xl font-bold text-white">AI Image Generator</h1>
+                <p class="text-gray-400 mt-2">Apne vicharon ko AI se jeevan dein. Aap jo bhi kalpana kar sakte hain, uska varnan karein.</p>
+            </header>
+
+            <!-- Input Form -->
+            <form id="generation-form" class="space-y-4">
+                <textarea 
+                    id="prompt-input"
+                    rows="3"
+                    class="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus-ring-violet transition-shadow duration-200"
+                    placeholder="Udahaaran: Ek jaadugar ki topi mein billi, photorealistic"
+                ></textarea>
+                <button 
+                    id="generate-btn"
+                    type="submit"
+                    class="w-full flex items-center justify-center p-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2v0Z"/><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/><path d="M12 12s2.5-2 5-2"/></svg>
+                    <span>Banayein</span>
+                </button>
+            </form>
         </div>
-        <div>
-            <input type="text" id="prompt-input" placeholder="एक बिल्ली एक जादूगर की टोपी में...">
-            <button id="generate-button">इमेज जनरेट करें</button>
-        </div>
-        <div id="loading">इमेज जेनरेट हो रही है...</div>
-        <div id="image-container">
+
+        <!-- Output Section -->
+        <div id="output-container" class="p-6 md:p-8 bg-gray-900/50 min-h-[300px] flex items-center justify-center">
+            <!-- Initial Placeholder -->
+            <div id="placeholder" class="text-center text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path><path d="m9.5 6.5 1 1"></path><path d="m14.5 6.5 1 1"></path><path d="m10 13.041c.835.66 1.848 1.004 2.891.954.23-.012.48-.062.71-.154"></path></svg>
+                <p>Aapki banayi gayi image yahan dikhegi.</p>
             </div>
-        <div class="error-message" id="error-display"></div>
+
+            <!-- Loading Spinner -->
+            <div id="loader" class="hidden text-center">
+                <div class="loader inline-block w-12 h-12 border-4 border-t-violet-500 border-gray-700 rounded-full"></div>
+                <p class="mt-4 text-gray-400">Aapki kalpana banayi ja rahi hai...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="hidden text-center text-red-400 bg-red-900/50 p-4 rounded-lg"></div>
+
+            <!-- Result Image -->
+            <img id="result-image" src="" alt="Generated AI Image" class="hidden w-full max-w-lg h-auto rounded-lg shadow-lg">
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bytez.js@latest/dist/bytez.min.js"></script>
-
     <script>
-        // Bytez.js SDK को इनिशियलाइज़ करें
-        // ***************************************************************
-        // ** चेतावनी: यह API कुंजी सीधे ब्राउज़र में उजागर हो रही है! **
-        // ** इसे कभी भी प्रोडक्शन एप्लिकेशन में ऐसे उपयोग न करें।    **
-        // ***************************************************************
-        const sdk = new Bytez("66bc9091b357069268c2ab84ca354b9f"); // अपनी API कुंजी यहाँ डालें
-
-        // Bytez.js में मॉडल का नाम
-        const MODEL_NAME = "SG161222/Realistic_Vision_V5.1_noVAE";
-
-        // HTML तत्वों का संदर्भ प्राप्त करें
+        // --- DOM Element References ---
+        const generationForm = document.getElementById('generation-form');
         const promptInput = document.getElementById('prompt-input');
-        const generateButton = document.getElementById('generate-button');
-        const loadingDiv = document.getElementById('loading');
-        const imageContainer = document.getElementById('image-container');
-        const errorDisplay = document.getElementById('error-display');
+        const generateBtn = document.getElementById('generate-btn');
+        const outputContainer = document.getElementById('output-container');
+        const placeholder = document.getElementById('placeholder');
+        const loader = document.getElementById('loader');
+        const errorMessage = document.getElementById('error-message');
+        const resultImage = document.getElementById('result-image');
+        const generateBtnText = generateBtn.querySelector('span');
 
-        // बटन पर क्लिक इवेंट जोड़ें
-        generateButton.addEventListener('click', async () => {
-            const prompt = promptInput.value.trim(); // इनपुट से प्रॉम्प्ट प्राप्त करें
+        // --- Bytz.js SDK Initialization ---
+        // UMD script window object par `Bytez` ke roop mein library ko expose karta hai.
+        // Hum aapke diye gaye API key aur model identifier ka upyog karte hain.
+        const API_KEY = "66bc9091b357069268c2ab84ca354b9f";
+        const MODEL_ID = "SG161222/Realistic_Vision_V5.1_noVAE";
+        
+        let sdk;
+        let model;
 
-            // यदि प्रॉम्प्ट खाली है, तो अलर्ट करें
-            if (!prompt) {
-                alert('कृपया एक प्रॉम्प्ट दर्ज करें!');
-                return;
+        // --- UI Helper Functions ---
+
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                generateBtn.disabled = true;
+                if(generateBtnText) generateBtnText.textContent = 'Bana raha hai...';
+                placeholder.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                resultImage.classList.add('hidden');
+                loader.classList.remove('hidden');
+            } else {
+                generateBtn.disabled = false;
+                if(generateBtnText) generateBtnText.textContent = 'Banayein';
+                loader.classList.add('hidden');
             }
+        }
 
-            // UI अपडेट करें: पिछली इमेज और एरर को साफ करें, लोडिंग दिखाएं, बटन डिसेबल करें
-            imageContainer.innerHTML = '';
-            errorDisplay.innerHTML = '';
-            loadingDiv.style.display = 'block';
-            generateButton.disabled = true;
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            resultImage.classList.add('hidden');
+            setLoadingState(false); // Error aane par loading state band karna sunishchit karein
+        }
 
-            try {
-                // Bytez.js मॉडल को चुनें
-                const model = sdk.model(MODEL_NAME);
-
-                // मॉडल पर इनपुट भेजें और आउटपुट प्राप्त करें
-                const { error, output } = await model.run(prompt);
-
-                if (error) {
-                    // यदि AI मॉडल से कोई त्रुटि है
-                    console.error("AI Model Error:", error);
-                    errorDisplay.innerHTML = `इमेज जेनरेट करने में त्रुटि: ${error.message || 'अज्ञात त्रुटि'}`;
-                } else if (output && output.image_url) {
-                    // यदि इमेज URL सफलतापूर्वक प्राप्त हुआ है, तो उसे दिखाएं
-                    const img = document.createElement('img');
-                    img.src = output.image_url;
-                    img.alt = prompt;
-                    imageContainer.appendChild(img);
-                } else {
-                    // यदि कोई आउटपुट नहीं है या इमेज URL नहीं है
-                    imageContainer.innerHTML = '<p>इमेज URL नहीं मिला।</p>';
+        function displayImage(url) {
+            resultImage.src = url;
+            resultImage.onload = () => {
+                resultImage.classList.remove('hidden');
+                loader.classList.add('hidden');
+                setLoadingState(false);
+            };
+            resultImage.onerror = () => {
+                showError("Diye gaye URL se generate ki gayi image load karne mein vifal.");
+            };
+        }
+        
+        // --- Main Logic ---
+        
+        // DOM taiyar hone par SDK aur Model ko initialize karein
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Bytez) {
+                try {
+                    sdk = new window.Bytez(API_KEY);
+                    model = sdk.model(MODEL_ID);
+                } catch (e) {
+                    console.error("Bytz SDK initialize karte samay error:", e);
+                    showError("Image generation library initialize karte samay error.");
                 }
-            } catch (err) {
-                // यदि Fetch या JavaScript में कोई अप्रत्याशित त्रुटि है
-                console.error('Fetch या SDK त्रुटि:', err);
-                errorDisplay.innerHTML = `कुछ गलत हो गया: ${err.message || 'कृपया कंसोल देखें।'}`;
-            } finally {
-                // हमेशा UI को साफ करें और बटन को फिर से सक्षम करें
-                loadingDiv.style.display = 'none';
-                generateButton.disabled = false;
+            } else {
+                console.error("Bytez.js library load nahi hui!");
+                showError("Error: Image generation library load hone mein vifal rahi.");
             }
         });
 
-        console.log("एप्लिकेशन लोड हो गया है। आप प्रॉम्प्ट दर्ज कर सकते हैं।");
+
+        // --- Event Listener ---
+        generationForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+            
+            const prompt = promptInput.value.trim();
+            if (!prompt) {
+                showError("Image banane ke liye कृपया ek prompt darj karein.");
+                return;
+            }
+            if (!sdk || !model) {
+                showError("SDK initialize nahi hua hai. Image nahi banayi ja sakti.");
+                return;
+            }
+
+            setLoadingState(true);
+
+            try {
+                console.log(`Model '${MODEL_ID}' ko prompt ke saath chala rahe hain: "${prompt}"`);
+                const { error, output } = await model.run(prompt);
+
+                if (error) {
+                    console.error("API Error:", error);
+                    showError(error.message || "API se ek anjaan error aaya.");
+                } else if (output && Array.isArray(output) && output.length > 0) {
+                    console.log("API Success. Output:", output);
+                    const imageUrl = output[0];
+                    displayImage(imageUrl);
+                } else {
+                    console.error("Unexpected output format:", output);
+                    showError("API ne ek anપેkshit parinaam diya. Details ke liye console check karein.");
+                }
+
+            } catch (err) {
+                console.error("Exception pakda gaya:", err);
+                showError(err.message || "Ek gambhir error aaya. Kripya baad mein fir se prayas karein.");
+            } 
+        });
     </script>
 </body>
 </html>
