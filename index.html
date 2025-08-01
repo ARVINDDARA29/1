@@ -1,205 +1,255 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image Generator</title>
-    
-    <!-- Tailwind CSS for styling -->
+    <title>पोल मैनेजमेंट ऐप</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bytez.js library from GitHub via jsDelivr CDN -->
-    <script src="https://cdn.jsdelivr.net/gh/expoint/bytez.js/dist/index.umd.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Custom styles */
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
         }
-        /* Loader ke liye animation */
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .container {
+            width: 100%;
+            max-width: 36rem; /* Slightly smaller for a management tool */
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        .loader {
-            animation: spin 1s linear infinite;
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6); /* Blue to purple gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        /* Custom focus ring color */
-        .focus-ring-violet {
-            --tw-ring-color: #7c3aed;
+        .button-primary {
+            background-color: #3b82f6; /* Tailwind blue-500 */
+            color: white;
+            padding: 0.85rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        .button-primary:hover:not(:disabled) {
+            background-color: #2563eb; /* Darker blue on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+        }
+        .button-primary:disabled {
+            background-color: #93c5fd; /* Light blue when disabled */
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        input[type="text"], textarea {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen p-4">
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-bold text-center gradient-text">पोल मैनेजमेंट</h1>
+        <p class="text-center text-slate-600">यहां नए पोल बनाएं जो आपके JEE Crackers ऐप में दिखेंगे।</p>
 
-    <div class="w-full max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
-        <div class="p-6 md:p-8">
-            <header class="text-center mb-6">
-                <h1 class="text-3xl md:text-4xl font-bold text-white">AI Image Generator</h1>
-                <p class="text-gray-400 mt-2">Apne vicharon ko AI se jeevan dein. Aap jo bhi kalpana kar sakte hain, uska varnan karein.</p>
-            </header>
-
-            <!-- Input Form -->
-            <form id="generation-form" class="space-y-4">
-                <textarea 
-                    id="prompt-input"
-                    rows="3"
-                    class="w-full p-4 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus-ring-violet transition-shadow duration-200"
-                    placeholder="Udahaaran: Ek jaadugar ki topi mein billi, photorealistic"
-                ></textarea>
-                <button 
-                    id="generate-btn"
-                    type="submit"
-                    class="w-full flex items-center justify-center p-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2v0Z"/><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"/><path d="M12 12s2.5-2 5-2"/></svg>
-                    <span>Banayein</span>
-                </button>
-            </form>
+        <div class="space-y-4">
+            <div>
+                <label for="poll-question" class="block text-slate-700 font-semibold mb-2">पोल प्रश्न:</label>
+                <textarea id="poll-question" class="w-full h-24" placeholder="अपना पोल प्रश्न यहाँ लिखें..."></textarea>
+            </div>
+            <button id="create-poll-btn" class="button-primary w-full">पोल बनाएँ</button>
         </div>
 
-        <!-- Output Section -->
-        <div id="output-container" class="p-6 md:p-8 bg-gray-900/50 min-h-[300px] flex items-center justify-center">
-            <!-- Initial Placeholder -->
-            <div id="placeholder" class="text-center text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path><path d="m9.5 6.5 1 1"></path><path d="m14.5 6.5 1 1"></path><path d="m10 13.041c.835.66 1.848 1.004 2.891.954.23-.012.48-.062.71-.154"></path></svg>
-                <p>Aapki banayi gayi image yahan dikhegi.</p>
+        <div id="recent-polls-section" class="space-y-3 mt-6">
+            <h2 class="text-2xl font-bold text-slate-800 border-b pb-2">हाल के पोल</h2>
+            <div id="polls-list" class="space-y-3">
+                <p class="text-slate-500 text-center">पोल लोड हो रहे हैं...</p>
             </div>
-
-            <!-- Loading Spinner -->
-            <div id="loader" class="hidden text-center">
-                <div class="loader inline-block w-12 h-12 border-4 border-t-violet-500 border-gray-700 rounded-full"></div>
-                <p class="mt-4 text-gray-400">Aapki kalpana banayi ja rahi hai...</p>
-            </div>
-
-            <!-- Error Message -->
-            <div id="error-message" class="hidden text-center text-red-400 bg-red-900/50 p-4 rounded-lg"></div>
-
-            <!-- Result Image -->
-            <img id="result-image" src="" alt="Generated AI Image" class="hidden w-full max-w-lg h-auto rounded-lg shadow-lg">
         </div>
     </div>
 
-    <script>
-        // --- DOM Element References ---
-        const generationForm = document.getElementById('generation-form');
-        const promptInput = document.getElementById('prompt-input');
-        const generateBtn = document.getElementById('generate-btn');
-        const outputContainer = document.getElementById('output-container');
-        const placeholder = document.getElementById('placeholder');
-        const loader = document.getElementById('loader');
-        const errorMessage = document.getElementById('error-message');
-        const resultImage = document.getElementById('result-image');
-        const generateBtnText = generateBtn.querySelector('span');
+    <!-- Modal for messages -->
+    <div id="message-modal-container" class="hidden">
+        <div class="modal-backdrop"></div>
+        <div id="message-modal" class="modal">
+            <h3 id="modal-title" class="text-xl font-bold mb-4">सूचना</h3>
+            <p id="modal-text" class="text-slate-700 mb-6"></p>
+            <button id="modal-ok-btn" class="button-primary w-full">ठीक है</button>
+        </div>
+    </div>
 
-        // --- Bytz.js SDK Initialization ---
-        // UMD script window object par `Bytez` ke roop mein library ko expose karta hai.
-        // Hum aapke diye gaye API key aur model identifier ka upyog karte hain.
-        const API_KEY = "66bc9091b357069268c2ab84ca354b9f";
-        const MODEL_ID = "SG161222/Realistic_Vision_V5.1_noVAE";
-        
-        let sdk;
-        let model;
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-        // --- UI Helper Functions ---
+        // Firebase Configuration (same as your main app)
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3faZ16ZTsIUBEfI9dl55RnDklVeWIHts",
+            authDomain: "arvind-dara.firebaseapp.com",
+            projectId: "arvind-dara",
+            storageBucket: "arvind-dara.appspot.com",
+            messagingSenderId: "341922555843",
+            appId: "1:341922555843:web:cefd0e44e5d8afae4fbf76"
+        };
 
-        function setLoadingState(isLoading) {
-            if (isLoading) {
-                generateBtn.disabled = true;
-                if(generateBtnText) generateBtnText.textContent = 'Bana raha hai...';
-                placeholder.classList.add('hidden');
-                errorMessage.classList.add('hidden');
-                resultImage.classList.add('hidden');
-                loader.classList.remove('hidden');
-            } else {
-                generateBtn.disabled = false;
-                if(generateBtnText) generateBtnText.textContent = 'Banayein';
-                loader.classList.add('hidden');
+        let app, db, auth;
+        let currentUser; // Firebase Auth user
+
+        // DOM Elements
+        const pollQuestionInput = document.getElementById('poll-question');
+        const createPollBtn = document.getElementById('create-poll-btn');
+        const pollsList = document.getElementById('polls-list');
+        const messageModalContainer = document.getElementById('message-modal-container');
+        const modalTitle = document.getElementById('modal-title');
+        const modalText = document.getElementById('modal-text');
+        const modalOkBtn = document.getElementById('modal-ok-btn');
+
+        // Initialize Firebase
+        async function initializeFirebase() {
+            try {
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Sign in anonymously for simplicity in this management app
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        console.log("Firebase Auth user signed in:", user.uid);
+                        loadRecentPolls(); // Load polls once authenticated
+                    } else {
+                        signInAnonymously(auth).catch(error => {
+                            console.error("Anonymous sign-in failed:", error);
+                            showMessageModal("त्रुटि", "प्रमाणीकरण विफल। कृपया ऐप रीफ्रेश करें।");
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                showMessageModal("त्रुटि", "ऐप शुरू नहीं हो सका। कृपया रीफ्रेश करें।");
             }
         }
 
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden');
-            placeholder.classList.add('hidden');
-            resultImage.classList.add('hidden');
-            setLoadingState(false); // Error aane par loading state band karna sunishchit karein
+        // Show custom modal
+        function showMessageModal(title, message) {
+            modalTitle.textContent = title;
+            modalText.textContent = message;
+            messageModalContainer.classList.remove('hidden');
         }
 
-        function displayImage(url) {
-            resultImage.src = url;
-            resultImage.onload = () => {
-                resultImage.classList.remove('hidden');
-                loader.classList.add('hidden');
-                setLoadingState(false);
-            };
-            resultImage.onerror = () => {
-                showError("Diye gaye URL se generate ki gayi image load karne mein vifal.");
-            };
+        // Hide custom modal
+        function hideMessageModal() {
+            messageModalContainer.classList.add('hidden');
         }
-        
-        // --- Main Logic ---
-        
-        // DOM taiyar hone par SDK aur Model ko initialize karein
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.Bytez) {
-                try {
-                    sdk = new window.Bytez(API_KEY);
-                    model = sdk.model(MODEL_ID);
-                } catch (e) {
-                    console.error("Bytz SDK initialize karte samay error:", e);
-                    showError("Image generation library initialize karte samay error.");
-                }
-            } else {
-                console.error("Bytez.js library load nahi hui!");
-                showError("Error: Image generation library load hone mein vifal rahi.");
-            }
-        });
 
+        // Function to create a new poll
+        async function createNewPoll() {
+            const questionText = pollQuestionInput.value.trim();
 
-        // --- Event Listener ---
-        generationForm.addEventListener('submit', async (event) => {
-            event.preventDefault(); 
-            
-            const prompt = promptInput.value.trim();
-            if (!prompt) {
-                showError("Image banane ke liye कृपया ek prompt darj karein.");
-                return;
-            }
-            if (!sdk || !model) {
-                showError("SDK initialize nahi hua hai. Image nahi banayi ja sakti.");
+            if (!questionText) {
+                showMessageModal("त्रुटि", "कृपया पोल प्रश्न दर्ज करें।");
                 return;
             }
 
-            setLoadingState(true);
+            createPollBtn.disabled = true;
+            createPollBtn.textContent = "बना रहा है...";
 
             try {
-                console.log(`Model '${MODEL_ID}' ko prompt ke saath chala rahe hain: "${prompt}"`);
-                const { error, output } = await model.run(prompt);
+                await addDoc(collection(db, "polls"), {
+                    questionText: questionText,
+                    thumbsUpCount: 0,
+                    thumbsDownCount: 0,
+                    createdAt: serverTimestamp(),
+                    createdBy: currentUser ? currentUser.uid : 'anonymous', // Record who created it
+                    createdByName: currentUser ? (currentUser.displayName || 'Anonymous') : 'Anonymous'
+                });
+                showMessageModal("सफलता", "पोल सफलतापूर्वक बनाया गया!");
+                pollQuestionInput.value = ''; // Clear input
+            } catch (error) {
+                console.error("Error creating poll:", error);
+                showMessageModal("त्रुटि", "पोल बनाने में विफल: " + error.message);
+            } finally {
+                createPollBtn.disabled = false;
+                createPollBtn.textContent = "पोल बनाएँ";
+            }
+        }
 
-                if (error) {
-                    console.error("API Error:", error);
-                    showError(error.message || "API se ek anjaan error aaya.");
-                } else if (output && Array.isArray(output) && output.length > 0) {
-                    console.log("API Success. Output:", output);
-                    const imageUrl = output[0];
-                    displayImage(imageUrl);
-                } else {
-                    console.error("Unexpected output format:", output);
-                    showError("API ne ek anપેkshit parinaam diya. Details ke liye console check karein.");
+        // Function to load and display recent polls
+        function loadRecentPolls() {
+            const q = query(collection(db, "polls"), orderBy("createdAt", "desc")); // Order by creation time, latest first
+            
+            onSnapshot(q, (querySnapshot) => {
+                pollsList.innerHTML = ''; // Clear current list
+                if (querySnapshot.empty) {
+                    pollsList.innerHTML = '<p class="text-slate-500 text-center">अभी तक कोई पोल नहीं है।</p>';
+                    return;
                 }
+                querySnapshot.forEach((doc) => {
+                    const poll = doc.data();
+                    const pollItem = document.createElement('div');
+                    pollItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200';
+                    pollItem.innerHTML = `
+                        <p class="font-bold text-slate-800 mb-1">${poll.questionText}</p>
+                        <p class="text-sm text-slate-600">👍 ${poll.thumbsUpCount || 0} | 👎 ${poll.thumbsDownCount || 0}</p>
+                        <p class="text-xs text-slate-400 mt-2">बनाया गया: ${poll.createdAt ? new Date(poll.createdAt.toDate()).toLocaleString('hi-IN') : 'N/A'}</p>
+                    `;
+                    pollsList.appendChild(pollItem);
+                });
+            }, (error) => {
+                console.error("Error loading polls:", error);
+                pollsList.innerHTML = '<p class="text-red-500 text-center">पोल लोड करने में विफल।</p>';
+            });
+        }
 
-            } catch (err) {
-                console.error("Exception pakda gaya:", err);
-                showError(err.message || "Ek gambhir error aaya. Kripya baad mein fir se prayas karein.");
-            } 
-        });
+        // Event Listeners
+        createPollBtn.addEventListener('click', createNewPoll);
+        modalOkBtn.addEventListener('click', hideMessageModal);
+
+        // Initialize Firebase on window load
+        window.addEventListener('load', initializeFirebase);
     </script>
 </body>
 </html>
