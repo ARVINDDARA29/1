@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diamond Coin App</title>
+    <meta name="monetag" content="bc78f2b23fcc04c2f15420d434255799">
+    <title>ArvindDara's Diamond App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -109,7 +110,6 @@
         .toast.show {
             opacity: 1;
         }
-        /* Styles for login inputs */
         .login-input {
             background-color: #4a5568;
             border: 1px solid #718096;
@@ -126,6 +126,21 @@
             border-color: #e84393;
             box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.3);
         }
+        .banner-wrapper {
+            position: relative;
+        }
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: pointer;
+        }
+        .banner-overlay.clicked {
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -138,8 +153,8 @@
             </div>
 
             <!-- Login Screens -->
-            <div id="main-login-screen" class="screen flex-col justify-center items-center p-8 space-y-6">
-                <h2 class="text-4xl font-bold text-white mb-8">स्वागत है! 👋</h2>
+            <div id="main-login-screen" class="screen flex-col justify-center items-center p-8 space-y-6 text-center">
+                <h2 class="text-4xl font-bold text-white mb-8">ArvindDara's Diamond Hub में आपका स्वागत है! 💎</h2>
                 <button id="email-signup-btn" class="button-primary w-full max-w-sm">साइन अप करें (ईमेल/पासवर्ड)</button>
                 <button id="email-login-btn" class="button-secondary w-full max-w-sm">लॉग इन करें (ईमेल/पासवर्ड)</button>
                 <button id="continue-as-guest-btn" class="button-secondary w-full max-w-sm">गेस्ट के रूप में जारी रखें</button>
@@ -205,24 +220,24 @@
                 </header>
                 <p class="text-center text-lg text-yellow-400">बैनर पर क्लिक करें और कॉइन प्राप्त करें!</p>
                 <div id="banners-container" class="space-y-4">
-                     <!-- Banner 1 -->
                     <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
                         <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 1</p>
                         <script type="text/javascript">
                             atOptions = { 'key' : '83bf329d89f64adb373217c75241cebf', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
                         </script>
                         <script type="text/javascript" src="//www.highperformanceformat.com/83bf329d89f64adb373217c75241cebf/invoke.js"></script>
+                        <div class="banner-overlay"></div>
                     </div>
-                     <!-- Banner 2 -->
                     <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
                          <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 2</p>
                          <iframe src="https://www.profitableratecpm.com/tx0m0mr238?key=77c00f39cad781b51ff16c788ff75f84" height="50" width="320" frameborder="0" scrolling="no"></iframe>
+                         <div class="banner-overlay"></div>
                     </div>
-                     <!-- Banner 3 -->
                     <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
                         <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 3</p>
                         <script async="async" data-cfasync="false" src="//pl27209153.profitableratecpm.com/4e2d6d16c1332f7c73b28bca760b3ec9/invoke.js"></script>
                         <div id="container-4e2d6d16c1332f7c73b28bca760b3ec9"></div>
+                        <div class="banner-overlay"></div>
                     </div>
                 </div>
             </div>
@@ -250,7 +265,6 @@
                     <h1 id="offer-title" class="text-xl font-bold mx-auto">Offers</h1>
                 </header>
                 <div id="offers-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                    <!-- Offers will be populated here -->
                 </div>
             </div>
         </main>
@@ -276,19 +290,18 @@
     <div id="toast-container"></div>
 
     <script type="module">
-        // Firebase and app initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
         // --- CONFIG & GLOBAL VARS ---
         const firebaseConfig = {
-            apiKey: "AIzaSyC3faZ16ZTsIUBEfI9dl55RnDklVeWIHts",
-            authDomain: "arvind-dara.firebaseapp.com",
-            projectId: "arvind-dara",
-            storageBucket: "arvind-dara.appspot.com",
-            messagingSenderId: "341922555843",
-            appId: "1:341922555843:web:cefd0e44e5d8afae4fbf76"
+            apiKey: "AIzaSyAkkS8wmSnkQfTGydbPe-i1C7mO0w5z8j4",
+            authDomain: "jai-shree-ram-a9e73.firebaseapp.com",
+            projectId: "jai-shree-ram-a9e73",
+            storageBucket: "jai-shree-ram-a9e73.appspot.com",
+            messagingSenderId: "557868202170",
+            appId: "1:557868202170:web:a2627a26b7ee452075aa83"
         };
         
         let app, db, auth, currentUser, userData, userId, unsubscribeUser;
@@ -318,7 +331,11 @@
                 const lastScreenId = screenHistory.pop();
                 showScreen(lastScreenId, true);
             } else {
-                showScreen('main-login-screen', true);
+                if (currentUser) {
+                    showScreen('home-screen', true);
+                } else {
+                    showScreen('main-login-screen', true);
+                }
             }
         }
         
@@ -372,7 +389,6 @@
                         userId = user.uid;
                         await setupUser(user.uid);
                     } else {
-                        // If no user, show login screen
                         currentUser = null;
                         userId = null;
                         userData = null;
@@ -386,7 +402,6 @@
             }
         }
 
-        // **FIXED GUEST LOGIN LOGIC**
         async function setupUser(uid) {
             const userRef = doc(db, "ffusers", uid);
             if(unsubscribeUser) unsubscribeUser();
@@ -396,7 +411,6 @@
                     userData = docSnap.data();
                     updateUI();
                     
-                    // Navigate to home screen only when data is confirmed
                     const isLoginScreenActive = document.getElementById('main-login-screen').classList.contains('active') ||
                                                 document.getElementById('guest-name-screen').classList.contains('active') ||
                                                 document.getElementById('email-login-screen').classList.contains('active') ||
@@ -406,9 +420,6 @@
                         showScreen('home-screen');
                     }
                 } else {
-                    // This case is normal during the signup process.
-                    // The document will be created by the signup/guest function.
-                    // The snapshot will re-fire once the document is created.
                     console.warn(`User document for ${uid} does not exist yet. Waiting for creation by signup/guest flow...`);
                 }
             }, (error) => {
@@ -435,14 +446,12 @@
                 const userCredential = await signInAnonymously(auth);
                 const user = userCredential.user;
                 const userRef = doc(db, "ffusers", user.uid);
-                // Create the document right after anonymous sign-in
                 await setDoc(userRef, {
                     name: name,
                     uid: user.uid,
                     coins: 0,
                     createdAt: serverTimestamp()
                 });
-                // onAuthStateChanged will fire and call setupUser, which will then find this document.
             } catch (error) {
                 console.error("Guest sign-in error:", error);
                 showMessageModal("Error", "Could not sign in as guest.");
@@ -461,12 +470,10 @@
                 showToast("पासवर्ड कम से कम 6 वर्णों का होना चाहिए।"); return;
             }
 
-            console.log(`Attempting signup for: ${email}`);
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 const userRef = doc(db, "ffusers", user.uid);
-                // Create the document right after user creation
                 await setDoc(userRef, {
                     name: name,
                     email: email,
@@ -474,7 +481,6 @@
                     coins: 0,
                     createdAt: serverTimestamp()
                 });
-                // onAuthStateChanged will fire and call setupUser.
             } catch (error) {
                 console.error("Signup error:", error.code, error.message);
                 if (error.code === 'auth/email-already-in-use') {
@@ -483,8 +489,7 @@
                      showMessageModal("Signup Error", "पासवर्ड बहुत कमजोर है। कृपया एक मजबूत पासवर्ड चुनें।");
                 } else if (error.code === 'auth/invalid-email') {
                      showMessageModal("Signup Error", "अमान्य ईमेल प्रारूप। कृपया एक मान्य ईमेल दर्ज करें।");
-                }
-                else {
+                } else {
                     showMessageModal("Signup Error", `खाता बनाने में विफलता: ${error.code}`);
                 }
             }
@@ -496,10 +501,8 @@
             if (!email || !password) {
                 showToast("कृपया ईमेल और पासवर्ड दर्ज करें।"); return;
             }
-            console.log(`Attempting login for: ${email}`);
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // onAuthStateChanged will fire and call setupUser.
             } catch (error) {
                 console.error("Login error:", error.code, error.message);
                  if (error.code === 'auth/invalid-credential') {
@@ -525,7 +528,6 @@
 
         document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', goBack));
         
-        // Login screen buttons
         document.getElementById('email-signup-btn').addEventListener('click', () => showScreen('email-signup-screen'));
         document.getElementById('email-login-btn').addEventListener('click', () => showScreen('email-login-screen'));
         document.getElementById('continue-as-guest-btn').addEventListener('click', () => showScreen('guest-name-screen'));
@@ -534,27 +536,47 @@
         document.getElementById('signup-btn').addEventListener('click', handleEmailSignup);
         document.getElementById('email-login-submit-btn').addEventListener('click', handleEmailLogin);
 
-
-        // Home Screen buttons
-        document.getElementById('copy-id-btn').addEventListener('click', () => {
+        document.getElementById('copy-id-btn').addEventListener('click', async () => {
             if(!userData || !userData.uid) return;
-            navigator.clipboard.writeText(userData.uid).then(() => {
+            const textToCopy = userData.uid;
+            
+            try {
+                await navigator.clipboard.writeText(textToCopy);
                 showToast("User ID copied!");
-            }).catch(err => {
-                console.error('Failed to copy:', err);
-                showToast("Copy failed!", 3000);
-            });
+            } catch (err) {
+                console.warn("Clipboard API failed, using fallback. Error:", err);
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                textArea.style.position = "fixed";
+                textArea.style.top = "-9999px";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast("User ID copied!");
+                } catch (execErr) {
+                    console.error('Fallback copy failed:', execErr);
+                    showToast("Copy failed!", 3000);
+                }
+                document.body.removeChild(textArea);
+            }
         });
 
         document.getElementById('earn-btn').addEventListener('click', () => showScreen('earn-screen'));
         document.getElementById('withdraw-btn').addEventListener('click', () => showScreen('withdraw-screen'));
         document.getElementById('logout-btn').addEventListener('click', handleLogout);
 
-        // Earn Screen Logic
-        document.querySelectorAll('.banner-wrapper').forEach(banner => {
-            banner.addEventListener('click', async () => {
-                const value = parseFloat(banner.dataset.value);
+        document.querySelectorAll('.banner-overlay').forEach(overlay => {
+            overlay.addEventListener('click', async () => {
+                if (overlay.classList.contains('clicked')) return; 
+
+                const wrapper = overlay.parentElement;
+                const value = parseFloat(wrapper.dataset.value);
+
                 if (userId && value) {
+                    overlay.classList.add('clicked'); 
                     const userRef = doc(db, "ffusers", userId);
                     try {
                         await updateDoc(userRef, {
@@ -564,7 +586,12 @@
                     } catch (error) {
                         console.error("Error updating coins:", error);
                         showToast("Error updating coins.", 3000);
+                        overlay.classList.remove('clicked'); 
                     }
+
+                    setTimeout(() => {
+                        overlay.classList.remove('clicked');
+                    }, 5000); 
                 }
             });
         });
@@ -591,7 +618,7 @@
                 document.getElementById('offer-title').textContent = `${game} ${currency}`;
                 
                 const container = document.getElementById('offers-container');
-                container.innerHTML = ''; // Clear previous offers
+                container.innerHTML = ''; 
                 
                 gameOffers.forEach(offer => {
                     const card = document.createElement('div');
@@ -640,12 +667,10 @@
             const withdrawalsRef = collection(db, "withdrawals");
 
             try {
-                // Deduct coins
                 await updateDoc(userRef, {
                     coins: increment(-currentOffer.coins)
                 });
 
-                // Log withdrawal request
                 await addDoc(withdrawalsRef, {
                     userId: userId,
                     game: currentOffer.game,
@@ -655,7 +680,6 @@
                     createdAt: serverTimestamp()
                 });
 
-                // Show success message and redirect
                 showMessageModal("सफलता!", "डायमंड/यूसी 24 घंटे के भीतर आपके खाते में जमा कर दिए जाएंगे।", () => {
                     hideModals();
                     showScreen('home-screen', true);
@@ -670,6 +694,19 @@
             }
         });
 
+    </script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
