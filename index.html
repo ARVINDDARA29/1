@@ -3,129 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>पोल मैनेजमेंट ऐप</title>
+    <title>Diamond Coin App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 2rem;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
         }
-        .container {
+        .app-wrapper {
             width: 100%;
-            max-width: 36rem; /* Slightly smaller for a management tool */
-            background-color: #ffffff;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 2.5rem;
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #2d3748; /* Slightly lighter dark */
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
         }
-        .gradient-text {
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6); /* Blue to purple gradient */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            flex-grow: 1;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .screen.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .button-primary {
-            background-color: #3b82f6; /* Tailwind blue-500 */
+            background: linear-gradient(45deg, #f0932b, #e84393);
             color: white;
-            padding: 0.85rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 67, 147, 0.4);
+            border: none;
         }
-        .button-primary:hover:not(:disabled) {
-            background-color: #2563eb; /* Darker blue on hover */
+        .button-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 6px 20px rgba(232, 67, 147, 0.5);
         }
-        .button-primary:disabled {
-            background-color: #93c5fd; /* Light blue when disabled */
-            cursor: not-allowed;
-            box-shadow: none;
+        .button-secondary {
+            background-color: #4a5568;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.3s ease;
         }
-        input[type="text"], textarea {
-            border: 1px solid #cbd5e1;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            width: 100%;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        .offer-card {
+            background-color: #4a5568;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
         }
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        .offer-card:hover {
+            border-color: #f0932b;
+            transform: scale(1.05);
         }
         .modal-backdrop {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(0, 0, 0, 0.7);
             z-index: 40;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .modal {
-            background-color: white;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            background-color: #2d3748;
             padding: 2rem;
             border-radius: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #48bb78;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+        /* Styles for login inputs */
+        .login-input {
+            background-color: #4a5568;
+            border: 1px solid #718096;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+        }
+        .login-input::placeholder {
+            color: #a0aec0;
+        }
+        .login-input:focus {
+            outline: none;
+            border-color: #e84393;
+            box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.3);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-4xl font-bold text-center gradient-text">पोल मैनेजमेंट</h1>
-        <p class="text-center text-slate-600">यहां नए पोल बनाएं जो आपके JEE Crackers ऐप में दिखेंगे।</p>
-
-        <div class="space-y-4">
-            <div>
-                <label for="poll-question" class="block text-slate-700 font-semibold mb-2">पोल प्रश्न:</label>
-                <textarea id="poll-question" class="w-full h-24" placeholder="अपना पोल प्रश्न यहाँ लिखें..."></textarea>
+    <div class="app-wrapper">
+        <main>
+            <!-- Loading Screen -->
+            <div id="loading-screen" class="screen active justify-center items-center p-8">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-pink-500"></div>
+                <h1 class="text-2xl font-bold mt-8">ऐप लोड हो रहा है...</h1>
             </div>
-            <button id="create-poll-btn" class="button-primary w-full">पोल बनाएँ</button>
-        </div>
 
-        <div id="recent-polls-section" class="space-y-3 mt-6">
-            <h2 class="text-2xl font-bold text-slate-800 border-b pb-2">हाल के पोल</h2>
-            <div id="polls-list" class="space-y-3">
-                <p class="text-slate-500 text-center">पोल लोड हो रहे हैं...</p>
+            <!-- Login Screens -->
+            <div id="main-login-screen" class="screen flex-col justify-center items-center p-8 space-y-6">
+                <h2 class="text-4xl font-bold text-white mb-8">स्वागत है! 👋</h2>
+                <button id="email-signup-btn" class="button-primary w-full max-w-sm">साइन अप करें (ईमेल/पासवर्ड)</button>
+                <button id="email-login-btn" class="button-secondary w-full max-w-sm">लॉग इन करें (ईमेल/पासवर्ड)</button>
+                <button id="continue-as-guest-btn" class="button-secondary w-full max-w-sm">गेस्ट के रूप में जारी रखें</button>
             </div>
-        </div>
+            <div id="guest-name-screen" class="screen flex-col justify-center items-center p-8 space-y-6">
+                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                <h2 class="text-3xl font-bold text-white">आपका नाम क्या है?</h2>
+                <input type="text" id="guest-name-input" placeholder="अपना नाम दर्ज करें" class="login-input w-full max-w-sm text-lg text-center">
+                <button id="create-guest-user-btn" class="button-primary w-full max-w-sm">आगे बढ़ें</button>
+            </div>
+            <div id="email-signup-screen" class="screen flex-col justify-center items-center p-8 space-y-4">
+                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                <h2 class="text-3xl font-bold text-white mb-4">खाता बनाएँ</h2>
+                <input type="text" id="signup-name-input" placeholder="अपना पूरा नाम दर्ज करें" class="login-input w-full max-w-sm">
+                <input type="email" id="signup-email-input" placeholder="ईमेल दर्ज करें" class="login-input w-full max-w-sm">
+                <input type="password" id="signup-password-input" placeholder="पासवर्ड दर्ज करें (min. 6 char)" class="login-input w-full max-w-sm">
+                <button id="signup-btn" class="button-primary w-full max-w-sm mt-4">साइन अप करें</button>
+            </div>
+             <div id="email-login-screen" class="screen flex-col justify-center items-center p-8 space-y-4">
+                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                <h2 class="text-3xl font-bold text-white mb-4">लॉग इन करें</h2>
+                <input type="email" id="login-email-input" placeholder="ईमेल दर्ज करें" class="login-input w-full max-w-sm">
+                <input type="password" id="login-password-input" placeholder="पासवर्ड दर्ज करें" class="login-input w-full max-w-sm">
+                <button id="email-login-submit-btn" class="button-primary w-full max-w-sm mt-4">लॉग इन करें</button>
+            </div>
+
+            <!-- Home Screen -->
+            <div id="home-screen" class="screen p-6 space-y-6">
+                <header class="flex justify-between items-center">
+                    <h1 id="welcome-message" class="text-2xl font-bold">नमस्ते, उपयोगकर्ता!</h1>
+                    <div class="bg-gray-900 px-4 py-2 rounded-full flex items-center gap-2">
+                        <i data-lucide="gem" class="text-yellow-400"></i>
+                        <span id="coin-balance" class="font-bold text-lg">0</span>
+                    </div>
+                </header>
+
+                <div class="bg-gray-700 p-4 rounded-lg space-y-2">
+                    <p class="text-sm text-gray-400">आपकी यूजर आईडी</p>
+                    <div class="flex items-center justify-between gap-4">
+                        <p id="user-id-display" class="font-mono text-sm break-all bg-gray-800 p-2 rounded-md flex-grow"></p>
+                        <button id="copy-id-btn" class="bg-pink-500 text-white px-3 py-2 rounded-lg hover:bg-pink-600 transition">कॉपी</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 pt-8">
+                    <button id="earn-btn" class="button-primary py-4 text-lg flex items-center justify-center gap-3">
+                        <i data-lucide="dollar-sign"></i>
+                        <span>फ्री डायमंड्स पाएं</span>
+                    </button>
+                    <button id="withdraw-btn" class="button-secondary py-4 text-lg flex items-center justify-center gap-3">
+                        <i data-lucide="send"></i>
+                        <span>निकालें (Withdraw)</span>
+                    </button>
+                </div>
+                 <button id="logout-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl mt-4">लॉग आउट</button>
+            </div>
+
+            <!-- Earn Diamonds Screen -->
+            <div id="earn-screen" class="screen p-6 space-y-6">
+                <header class="flex items-center">
+                    <button class="back-btn p-2 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                    <h1 class="text-xl font-bold mx-auto">कॉइंस कमाएं</h1>
+                </header>
+                <p class="text-center text-lg text-yellow-400">बैनर पर क्लिक करें और कॉइन प्राप्त करें!</p>
+                <div id="banners-container" class="space-y-4">
+                     <!-- Banner 1 -->
+                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
+                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 1</p>
+                        <script type="text/javascript">
+                            atOptions = { 'key' : '83bf329d89f64adb373217c75241cebf', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
+                        </script>
+                        <script type="text/javascript" src="//www.highperformanceformat.com/83bf329d89f64adb373217c75241cebf/invoke.js"></script>
+                    </div>
+                     <!-- Banner 2 -->
+                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
+                         <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 2</p>
+                         <iframe src="https://www.profitableratecpm.com/tx0m0mr238?key=77c00f39cad781b51ff16c788ff75f84" height="50" width="320" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                     <!-- Banner 3 -->
+                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
+                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 3</p>
+                        <script async="async" data-cfasync="false" src="//pl27209153.profitableratecpm.com/4e2d6d16c1332f7c73b28bca760b3ec9/invoke.js"></script>
+                        <div id="container-4e2d6d16c1332f7c73b28bca760b3ec9"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Withdraw Screen -->
+            <div id="withdraw-screen" class="screen p-6 space-y-6">
+                <header class="flex items-center">
+                    <button class="back-btn p-2 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                    <h1 class="text-xl font-bold mx-auto">निकालें</h1>
+                </header>
+                <div class="grid grid-cols-1 gap-4 pt-8">
+                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="Free Fire">
+                        Free Fire Diamonds
+                    </button>
+                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="BGMI">
+                        BGMI UC
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Offer Screen -->
+            <div id="offer-screen" class="screen p-6 space-y-6">
+                 <header class="flex items-center">
+                    <button class="back-btn p-2 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
+                    <h1 id="offer-title" class="text-xl font-bold mx-auto">Offers</h1>
+                </header>
+                <div id="offers-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+                    <!-- Offers will be populated here -->
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Modal for messages -->
-    <div id="message-modal-container" class="hidden">
+    <!-- Modals & Toasts -->
+    <div id="modal-container" class="hidden">
         <div class="modal-backdrop"></div>
-        <div id="message-modal" class="modal">
-            <h3 id="modal-title" class="text-xl font-bold mb-4">सूचना</h3>
-            <p id="modal-text" class="text-slate-700 mb-6"></p>
-            <button id="modal-ok-btn" class="button-primary w-full">ठीक है</button>
+        <div id="uid-modal" class="modal space-y-4">
+            <h3 id="uid-modal-title" class="text-xl font-bold text-center">Enter Your Game UID</h3>
+            <input type="text" id="uid-input" placeholder="Please enter your UID here" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-pink-500">
+            <div class="flex gap-4">
+                <button id="uid-cancel-btn" class="flex-1 button-secondary">रद्द करें</button>
+                <button id="uid-submit-btn" class="flex-1 button-primary">जमा करें</button>
+            </div>
+        </div>
+        <div id="message-modal" class="modal space-y-4 text-center">
+             <h3 id="message-modal-title" class="text-xl font-bold">Message</h3>
+             <p id="message-modal-text"></p>
+             <button id="message-modal-ok-btn" class="w-full button-primary">ठीक है</button>
         </div>
     </div>
+    <div id="toast-container"></div>
 
     <script type="module">
+        // Firebase and app initialization
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-        // Firebase Configuration (same as your main app)
+        // --- CONFIG & GLOBAL VARS ---
         const firebaseConfig = {
             apiKey: "AIzaSyC3faZ16ZTsIUBEfI9dl55RnDklVeWIHts",
             authDomain: "arvind-dara.firebaseapp.com",
@@ -134,122 +290,386 @@
             messagingSenderId: "341922555843",
             appId: "1:341922555843:web:cefd0e44e5d8afae4fbf76"
         };
+        
+        let app, db, auth, currentUser, userData, userId, unsubscribeUser;
+        let screenHistory = [];
+        let currentOffer = null;
 
-        let app, db, auth;
-        let currentUser; // Firebase Auth user
+        // --- DOM ELEMENTS ---
+        const allScreens = document.querySelectorAll('.screen');
+        const modalContainer = document.getElementById('modal-container');
 
-        // DOM Elements
-        const pollQuestionInput = document.getElementById('poll-question');
-        const createPollBtn = document.getElementById('create-poll-btn');
-        const pollsList = document.getElementById('polls-list');
-        const messageModalContainer = document.getElementById('message-modal-container');
-        const modalTitle = document.getElementById('modal-title');
-        const modalText = document.getElementById('modal-text');
-        const modalOkBtn = document.getElementById('modal-ok-btn');
+        // --- CORE APP FLOW ---
+        function showScreen(screenId, isNav = false) {
+            console.log(`Navigating to: ${screenId}`);
+            const currentActive = document.querySelector('.screen.active');
+            if (currentActive && currentActive.id !== screenId && !isNav) {
+                screenHistory.push(currentActive.id);
+            }
+            if (isNav) screenHistory = [];
 
-        // Initialize Firebase
+            allScreens.forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            lucide.createIcons();
+        }
+
+        function goBack() {
+            if (screenHistory.length > 0) {
+                const lastScreenId = screenHistory.pop();
+                showScreen(lastScreenId, true);
+            } else {
+                showScreen('main-login-screen', true);
+            }
+        }
+        
+        function showToast(message, duration = 3000) {
+            const toastId = `toast-${Date.now()}`;
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.getElementById('toast-container').appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500);
+            }, duration);
+        }
+        
+        function showMessageModal(title, text, onOk) {
+            document.getElementById('message-modal-title').textContent = title;
+            document.getElementById('message-modal-text').textContent = text;
+            modalContainer.classList.remove('hidden');
+            document.getElementById('message-modal').classList.remove('hidden');
+            document.getElementById('uid-modal').classList.add('hidden');
+            if(onOk) {
+                document.getElementById('message-modal-ok-btn').onclick = onOk;
+            } else {
+                document.getElementById('message-modal-ok-btn').onclick = hideModals;
+            }
+        }
+
+        function hideModals() {
+            modalContainer.classList.add('hidden');
+        }
+
+        // --- FIREBASE & AUTH ---
         async function initializeFirebase() {
             try {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
 
-                // Sign in anonymously for simplicity in this management app
-                onAuthStateChanged(auth, (user) => {
+                onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         currentUser = user;
-                        console.log("Firebase Auth user signed in:", user.uid);
-                        loadRecentPolls(); // Load polls once authenticated
+                        userId = user.uid;
+                        await setupUser(user.uid);
                     } else {
-                        signInAnonymously(auth).catch(error => {
-                            console.error("Anonymous sign-in failed:", error);
-                            showMessageModal("त्रुटि", "प्रमाणीकरण विफल। कृपया ऐप रीफ्रेश करें।");
-                        });
+                        // If no user, show login screen
+                        currentUser = null;
+                        userId = null;
+                        userData = null;
+                        if(unsubscribeUser) unsubscribeUser();
+                        showScreen('main-login-screen');
                     }
                 });
             } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                showMessageModal("त्रुटि", "ऐप शुरू नहीं हो सका। कृपया रीफ्रेश करें।");
+                console.error("Firebase Init Error:", error);
+                document.getElementById('loading-screen').innerHTML = '<p class="text-red-500">Error connecting to server.</p>';
             }
         }
 
-        // Show custom modal
-        function showMessageModal(title, message) {
-            modalTitle.textContent = title;
-            modalText.textContent = message;
-            messageModalContainer.classList.remove('hidden');
-        }
+        // **FIXED GUEST LOGIN LOGIC**
+        async function setupUser(uid) {
+            const userRef = doc(db, "ffusers", uid);
+            if(unsubscribeUser) unsubscribeUser();
 
-        // Hide custom modal
-        function hideMessageModal() {
-            messageModalContainer.classList.add('hidden');
-        }
+            unsubscribeUser = onSnapshot(userRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    userData = docSnap.data();
+                    updateUI();
+                    
+                    // Navigate to home screen only when data is confirmed
+                    const isLoginScreenActive = document.getElementById('main-login-screen').classList.contains('active') ||
+                                                document.getElementById('guest-name-screen').classList.contains('active') ||
+                                                document.getElementById('email-login-screen').classList.contains('active') ||
+                                                document.getElementById('email-signup-screen').classList.contains('active');
 
-        // Function to create a new poll
-        async function createNewPoll() {
-            const questionText = pollQuestionInput.value.trim();
-
-            if (!questionText) {
-                showMessageModal("त्रुटि", "कृपया पोल प्रश्न दर्ज करें।");
-                return;
-            }
-
-            createPollBtn.disabled = true;
-            createPollBtn.textContent = "बना रहा है...";
-
-            try {
-                await addDoc(collection(db, "polls"), {
-                    questionText: questionText,
-                    thumbsUpCount: 0,
-                    thumbsDownCount: 0,
-                    createdAt: serverTimestamp(),
-                    createdBy: currentUser ? currentUser.uid : 'anonymous', // Record who created it
-                    createdByName: currentUser ? (currentUser.displayName || 'Anonymous') : 'Anonymous'
-                });
-                showMessageModal("सफलता", "पोल सफलतापूर्वक बनाया गया!");
-                pollQuestionInput.value = ''; // Clear input
-            } catch (error) {
-                console.error("Error creating poll:", error);
-                showMessageModal("त्रुटि", "पोल बनाने में विफल: " + error.message);
-            } finally {
-                createPollBtn.disabled = false;
-                createPollBtn.textContent = "पोल बनाएँ";
-            }
-        }
-
-        // Function to load and display recent polls
-        function loadRecentPolls() {
-            const q = query(collection(db, "polls"), orderBy("createdAt", "desc")); // Order by creation time, latest first
-            
-            onSnapshot(q, (querySnapshot) => {
-                pollsList.innerHTML = ''; // Clear current list
-                if (querySnapshot.empty) {
-                    pollsList.innerHTML = '<p class="text-slate-500 text-center">अभी तक कोई पोल नहीं है।</p>';
-                    return;
+                    if (document.getElementById('loading-screen').classList.contains('active') || isLoginScreenActive) {
+                        showScreen('home-screen');
+                    }
+                } else {
+                    // This case is normal during the signup process.
+                    // The document will be created by the signup/guest function.
+                    // The snapshot will re-fire once the document is created.
+                    console.warn(`User document for ${uid} does not exist yet. Waiting for creation by signup/guest flow...`);
                 }
-                querySnapshot.forEach((doc) => {
-                    const poll = doc.data();
-                    const pollItem = document.createElement('div');
-                    pollItem.className = 'bg-slate-50 p-4 rounded-lg shadow-sm border border-slate-200';
-                    pollItem.innerHTML = `
-                        <p class="font-bold text-slate-800 mb-1">${poll.questionText}</p>
-                        <p class="text-sm text-slate-600">👍 ${poll.thumbsUpCount || 0} | 👎 ${poll.thumbsDownCount || 0}</p>
-                        <p class="text-xs text-slate-400 mt-2">बनाया गया: ${poll.createdAt ? new Date(poll.createdAt.toDate()).toLocaleString('hi-IN') : 'N/A'}</p>
-                    `;
-                    pollsList.appendChild(pollItem);
-                });
             }, (error) => {
-                console.error("Error loading polls:", error);
-                pollsList.innerHTML = '<p class="text-red-500 text-center">पोल लोड करने में विफल।</p>';
+                console.error("Error in user snapshot listener:", error);
+                showMessageModal("Connection Error", "Could not sync user data.");
             });
         }
 
-        // Event Listeners
-        createPollBtn.addEventListener('click', createNewPoll);
-        modalOkBtn.addEventListener('click', hideMessageModal);
+        function updateUI() {
+            if (!userData) return;
+            document.getElementById('welcome-message').textContent = `नमस्ते, ${userData.name}!`;
+            document.getElementById('coin-balance').textContent = parseFloat(userData.coins || 0).toFixed(2);
+            document.getElementById('user-id-display').textContent = userData.uid;
+        }
 
-        // Initialize Firebase on window load
-        window.addEventListener('load', initializeFirebase);
+        // --- LOGIN/SIGNUP HANDLERS ---
+        async function handleGuestSignIn() {
+            const name = document.getElementById('guest-name-input').value.trim();
+            if (!name) {
+                showToast("कृपया अपना नाम दर्ज करें।");
+                return;
+            }
+            try {
+                const userCredential = await signInAnonymously(auth);
+                const user = userCredential.user;
+                const userRef = doc(db, "ffusers", user.uid);
+                // Create the document right after anonymous sign-in
+                await setDoc(userRef, {
+                    name: name,
+                    uid: user.uid,
+                    coins: 0,
+                    createdAt: serverTimestamp()
+                });
+                // onAuthStateChanged will fire and call setupUser, which will then find this document.
+            } catch (error) {
+                console.error("Guest sign-in error:", error);
+                showMessageModal("Error", "Could not sign in as guest.");
+            }
+        }
+
+        async function handleEmailSignup() {
+            const name = document.getElementById('signup-name-input').value.trim();
+            const email = document.getElementById('signup-email-input').value.trim();
+            const password = document.getElementById('signup-password-input').value.trim();
+
+            if (!name || !email || !password) {
+                showToast("कृपया सभी फ़ील्ड भरें।"); return;
+            }
+            if (password.length < 6) {
+                showToast("पासवर्ड कम से कम 6 वर्णों का होना चाहिए।"); return;
+            }
+
+            console.log(`Attempting signup for: ${email}`);
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                const userRef = doc(db, "ffusers", user.uid);
+                // Create the document right after user creation
+                await setDoc(userRef, {
+                    name: name,
+                    email: email,
+                    uid: user.uid,
+                    coins: 0,
+                    createdAt: serverTimestamp()
+                });
+                // onAuthStateChanged will fire and call setupUser.
+            } catch (error) {
+                console.error("Signup error:", error.code, error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessageModal("Signup Error", "यह ईमेल पहले से उपयोग में है। कृपया लॉग इन करें या किसी अन्य ईमेल का उपयोग करें।");
+                } else if (error.code === 'auth/weak-password') {
+                     showMessageModal("Signup Error", "पासवर्ड बहुत कमजोर है। कृपया एक मजबूत पासवर्ड चुनें।");
+                } else if (error.code === 'auth/invalid-email') {
+                     showMessageModal("Signup Error", "अमान्य ईमेल प्रारूप। कृपया एक मान्य ईमेल दर्ज करें।");
+                }
+                else {
+                    showMessageModal("Signup Error", `खाता बनाने में विफलता: ${error.code}`);
+                }
+            }
+        }
+
+        async function handleEmailLogin() {
+            const email = document.getElementById('login-email-input').value.trim();
+            const password = document.getElementById('login-password-input').value.trim();
+            if (!email || !password) {
+                showToast("कृपया ईमेल और पासवर्ड दर्ज करें।"); return;
+            }
+            console.log(`Attempting login for: ${email}`);
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // onAuthStateChanged will fire and call setupUser.
+            } catch (error) {
+                console.error("Login error:", error.code, error.message);
+                 if (error.code === 'auth/invalid-credential') {
+                    showMessageModal("Login Error", "अमान्य ईमेल या पासवर्ड। कृपया पुनः प्रयास करें।");
+                } else {
+                    showMessageModal("Login Error", `लॉग इन करने में विफलता: ${error.code}`);
+                }
+            }
+        }
+
+        function handleLogout() {
+            signOut(auth).catch(error => {
+                console.error("Logout error:", error);
+                showMessageModal("Error", "Could not log out.");
+            });
+        }
+
+
+        // --- EVENT LISTENERS & LOGIC ---
+        window.addEventListener('load', () => {
+            initializeFirebase();
+        });
+
+        document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', goBack));
+        
+        // Login screen buttons
+        document.getElementById('email-signup-btn').addEventListener('click', () => showScreen('email-signup-screen'));
+        document.getElementById('email-login-btn').addEventListener('click', () => showScreen('email-login-screen'));
+        document.getElementById('continue-as-guest-btn').addEventListener('click', () => showScreen('guest-name-screen'));
+        
+        document.getElementById('create-guest-user-btn').addEventListener('click', handleGuestSignIn);
+        document.getElementById('signup-btn').addEventListener('click', handleEmailSignup);
+        document.getElementById('email-login-submit-btn').addEventListener('click', handleEmailLogin);
+
+
+        // Home Screen buttons
+        document.getElementById('copy-id-btn').addEventListener('click', () => {
+            if(!userData || !userData.uid) return;
+            navigator.clipboard.writeText(userData.uid).then(() => {
+                showToast("User ID copied!");
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showToast("Copy failed!", 3000);
+            });
+        });
+
+        document.getElementById('earn-btn').addEventListener('click', () => showScreen('earn-screen'));
+        document.getElementById('withdraw-btn').addEventListener('click', () => showScreen('withdraw-screen'));
+        document.getElementById('logout-btn').addEventListener('click', handleLogout);
+
+        // Earn Screen Logic
+        document.querySelectorAll('.banner-wrapper').forEach(banner => {
+            banner.addEventListener('click', async () => {
+                const value = parseFloat(banner.dataset.value);
+                if (userId && value) {
+                    const userRef = doc(db, "ffusers", userId);
+                    try {
+                        await updateDoc(userRef, {
+                            coins: increment(value)
+                        });
+                        showToast(`+${value.toFixed(2)} coins earned!`, 2000);
+                    } catch (error) {
+                        console.error("Error updating coins:", error);
+                        showToast("Error updating coins.", 3000);
+                    }
+                }
+            });
+        });
+
+        // Withdraw Screen Logic
+        const offers = {
+            "Free Fire": [
+                { coins: 100, diamonds: 100 },
+                { coins: 500, diamonds: 510 },
+                { coins: 1000, diamonds: 1500 }
+            ],
+            "BGMI": [
+                { coins: 100, uc: 100 },
+                { coins: 500, uc: 510 },
+                { coins: 1000, uc: 1500 }
+            ]
+        };
+
+        document.querySelectorAll('.withdraw-option-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const game = btn.dataset.game;
+                const gameOffers = offers[game];
+                const currency = game === "Free Fire" ? "Diamonds" : "UC";
+                document.getElementById('offer-title').textContent = `${game} ${currency}`;
+                
+                const container = document.getElementById('offers-container');
+                container.innerHTML = ''; // Clear previous offers
+                
+                gameOffers.forEach(offer => {
+                    const card = document.createElement('div');
+                    card.className = 'offer-card text-center';
+                    card.innerHTML = `
+                        <p class="text-3xl font-bold text-yellow-400">${offer.diamonds || offer.uc}</p>
+                        <p class="text-lg">${currency}</p>
+                        <p class="mt-4 bg-gray-800 inline-block px-4 py-1 rounded-full">${offer.coins} Coins</p>
+                    `;
+                    card.addEventListener('click', () => handleOfferClick(offer, game));
+                    container.appendChild(card);
+                });
+                showScreen('offer-screen');
+            });
+        });
+        
+        function handleOfferClick(offer, game) {
+            if (userData && userData.coins >= offer.coins) {
+                currentOffer = { ...offer, game };
+                document.getElementById('uid-modal-title').textContent = `Enter Your ${game} ID`;
+                modalContainer.classList.remove('hidden');
+                document.getElementById('uid-modal').classList.remove('hidden');
+                document.getElementById('message-modal').classList.add('hidden');
+            } else {
+                showMessageModal("Insufficient Coins", "You do not have enough coins for this offer.");
+            }
+        }
+        
+        // UID Modal Logic
+        document.getElementById('uid-cancel-btn').addEventListener('click', hideModals);
+        document.getElementById('message-modal-ok-btn').addEventListener('click', hideModals);
+        
+        document.getElementById('uid-submit-btn').addEventListener('click', async () => {
+            const gameUid = document.getElementById('uid-input').value.trim();
+            if (gameUid === '') {
+                showToast("Please enter a valid UID.", 3000);
+                return;
+            }
+            
+            if (!currentOffer || !userId) return;
+
+            hideModals();
+            showToast("Processing your request...", 4000);
+
+            const userRef = doc(db, "ffusers", userId);
+            const withdrawalsRef = collection(db, "withdrawals");
+
+            try {
+                // Deduct coins
+                await updateDoc(userRef, {
+                    coins: increment(-currentOffer.coins)
+                });
+
+                // Log withdrawal request
+                await addDoc(withdrawalsRef, {
+                    userId: userId,
+                    game: currentOffer.game,
+                    offer: currentOffer,
+                    gameUid: gameUid,
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+
+                // Show success message and redirect
+                showMessageModal("सफलता!", "डायमंड/यूसी 24 घंटे के भीतर आपके खाते में जमा कर दिए जाएंगे।", () => {
+                    hideModals();
+                    showScreen('home-screen', true);
+                });
+
+            } catch (error) {
+                console.error("Withdrawal Error:", error);
+                showMessageModal("Error", "There was an error processing your request. Please try again.");
+            } finally {
+                document.getElementById('uid-input').value = '';
+                currentOffer = null;
+            }
+        });
+
     </script>
 </body>
 </html>
