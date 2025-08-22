@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="58e2954bf0a854d2f0d747ecce1e8bbc">
-    <!-- User-requested verification meta tag -->
     <meta name="b448b54f4ed44237d86986f5a565b98127a55ba8" content="b448b54f4ed44237d86986f5a565b98127a55ba8" />
-    <title>ArvindDara's Diamond App</title>
+    <title>BISHNOI 29</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -128,21 +127,6 @@
             border-color: #e84393;
             box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.3);
         }
-        .banner-wrapper {
-            position: relative;
-        }
-        .banner-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            cursor: pointer;
-        }
-        .banner-overlay.clicked {
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -156,7 +140,7 @@
 
             <!-- Login Screens -->
             <div id="main-login-screen" class="screen flex-col justify-center items-center p-8 space-y-6 text-center">
-                <h2 class="text-4xl font-bold text-white mb-8">ArvindDara's Diamond Hub में आपका स्वागत है! 💎</h2>
+                <h2 class="text-4xl font-bold text-white mb-8">BISHNOI 29 में आपका स्वागत है! 💎</h2>
                 <button id="email-signup-btn" class="button-primary w-full max-w-sm">साइन अप करें (ईमेल/पासवर्ड)</button>
                 <button id="email-login-btn" class="button-secondary w-full max-w-sm">लॉग इन करें (ईमेल/पासवर्ड)</button>
                 <button id="continue-as-guest-btn" class="button-secondary w-full max-w-sm">गेस्ट के रूप में जारी रखें</button>
@@ -204,7 +188,7 @@
                 <div class="grid grid-cols-1 gap-4 pt-8">
                     <button id="earn-btn" class="button-primary py-4 text-lg flex items-center justify-center gap-3">
                         <i data-lucide="dollar-sign"></i>
-                        <span>फ्री डायमंड्स पाएं</span>
+                        <span>फ्री कॉइंस पाएं</span>
                     </button>
                     <button id="withdraw-btn" class="button-secondary py-4 text-lg flex items-center justify-center gap-3">
                         <i data-lucide="send"></i>
@@ -220,26 +204,27 @@
                     <button class="back-btn p-2 rounded-full hover:bg-gray-600"><i data-lucide="arrow-left"></i></button>
                     <h1 class="text-xl font-bold mx-auto">कॉइंस कमाएं</h1>
                 </header>
-                <p class="text-center text-lg text-yellow-400">बैनर पर क्लिक करें और कॉइन प्राप्त करें!</p>
+                <div class="bg-blue-600 p-4 rounded-lg text-white text-center font-bold">
+                    <p>विज्ञापन पर क्लिक करें। 5 सेकंड में कॉइन आपके खाते में जुड़ जाएंगे।</p>
+                </div>
                 <div id="banners-container" class="space-y-4">
-                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
+                    <div class="p-2 bg-gray-800 rounded-lg">
                         <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 1</p>
-                        <script type="text/javascript">
-                            atOptions = { 'key' : '83bf329d89f64adb373217c75241cebf', 'format' : 'iframe', 'height' : 50, 'width' : 320, 'params' : {} };
-                        </script>
-                        <script type="text/javascript" src="//www.highperformanceformat.com/83bf329d89f64adb373217c75241cebf/invoke.js"></script>
-                        <div class="banner-overlay"></div>
-                    </div>
-                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
-                         <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 2</p>
-                         <iframe src="https://www.profitableratecpm.com/tx0m0mr238?key=77c00f39cad781b51ff16c788ff75f84" height="50" width="320" frameborder="0" scrolling="no"></iframe>
-                         <div class="banner-overlay"></div>
-                    </div>
-                    <div class="banner-wrapper p-2 bg-gray-800 rounded-lg" data-value="0.5">
-                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 3</p>
                         <script async="async" data-cfasync="false" src="//pl27209153.profitableratecpm.com/4e2d6d16c1332f7c73b28bca760b3ec9/invoke.js"></script>
                         <div id="container-4e2d6d16c1332f7c73b28bca760b3ec9"></div>
-                        <div class="banner-overlay"></div>
+                    </div>
+                     <div class="p-2 bg-gray-800 rounded-lg">
+                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 2</p>
+                        <script type="text/javascript">
+                            atOptions = {
+                                'key' : '0d15173de61272c3e2bb15f8677bb5c5',
+                                'format' : 'iframe',
+                                'height' : 250,
+                                'width' : 300,
+                                'params' : {}
+                            };
+                        </script>
+                        <script type="text/javascript" src="//www.highperformanceformat.com/0d15173de61272c3e2bb15f8677bb5c5/invoke.js"></script>
                     </div>
                 </div>
             </div>
@@ -251,11 +236,8 @@
                     <h1 class="text-xl font-bold mx-auto">निकालें</h1>
                 </header>
                 <div class="grid grid-cols-1 gap-4 pt-8">
-                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="Free Fire">
-                        Free Fire Diamonds
-                    </button>
-                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="BGMI">
-                        BGMI UC
+                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="Google Play">
+                        Google Play Redeem Code
                     </button>
                 </div>
             </div>
@@ -292,11 +274,12 @@
     <div id="toast-container"></div>
 
     <script type="module">
+        // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-        // --- CONFIG & GLOBAL VARS ---
+        // --- Firebase Configuration and Global Variables ---
         const firebaseConfig = {
             apiKey: "AIzaSyAkkS8wmSnkQfTGydbPe-i1C7mO0w5z8j4",
             authDomain: "jai-shree-ram-a9e73.firebaseapp.com",
@@ -309,12 +292,18 @@
         let app, db, auth, currentUser, userData, userId, unsubscribeUser;
         let screenHistory = [];
         let currentOffer = null;
+        let hasEarnedFromBanner = false;
 
-        // --- DOM ELEMENTS ---
+        // --- DOM Elements ---
         const allScreens = document.querySelectorAll('.screen');
         const modalContainer = document.getElementById('modal-container');
 
-        // --- CORE APP FLOW ---
+        // --- Core Application Flow and UI Management ---
+        /**
+         * Hides all screens and shows the one with the given ID.
+         * @param {string} screenId The ID of the screen to show.
+         * @param {boolean} isNav True if this is a primary navigation, false if a sub-screen.
+         */
         function showScreen(screenId, isNav = false) {
             console.log(`Navigating to: ${screenId}`);
             const currentActive = document.querySelector('.screen.active');
@@ -328,6 +317,9 @@
             lucide.createIcons();
         }
 
+        /**
+         * Navigates back to the previous screen in the history.
+         */
         function goBack() {
             if (screenHistory.length > 0) {
                 const lastScreenId = screenHistory.pop();
@@ -341,6 +333,11 @@
             }
         }
         
+        /**
+         * Displays a toast notification.
+         * @param {string} message The message to display.
+         * @param {number} duration The duration in milliseconds.
+         */
         function showToast(message, duration = 3000) {
             const toastId = `toast-${Date.now()}`;
             const toast = document.createElement('div');
@@ -361,6 +358,12 @@
             }, duration);
         }
         
+        /**
+         * Shows a modal with a custom message.
+         * @param {string} title The modal title.
+         * @param {string} text The modal text content.
+         * @param {function} onOk The function to call when the OK button is clicked.
+         */
         function showMessageModal(title, text, onOk) {
             document.getElementById('message-modal-title').textContent = title;
             document.getElementById('message-modal-text').textContent = text;
@@ -374,62 +377,84 @@
             }
         }
 
+        /**
+         * Hides all modals.
+         */
         function hideModals() {
             modalContainer.classList.add('hidden');
         }
 
-        // --- FIREBASE & AUTH ---
+        // --- Firebase Initialization and Authentication ---
         async function initializeFirebase() {
             try {
+                // Initialize Firebase app and services
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
-
+                
+                // Set up the authentication state listener
+                // This listener determines the initial screen after Firebase is ready
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
+                        // A user is signed in.
                         currentUser = user;
                         userId = user.uid;
                         await setupUser(user.uid);
                     } else {
+                        // No user is signed in. Show the login screen.
                         currentUser = null;
                         userId = null;
                         userData = null;
-                        if(unsubscribeUser) unsubscribeUser();
+                        if(unsubscribeUser) unsubscribeUser(); // Unsubscribe from old user data
                         showScreen('main-login-screen');
                     }
                 });
             } catch (error) {
                 console.error("Firebase Init Error:", error);
-                document.getElementById('loading-screen').innerHTML = '<p class="text-red-500">Error connecting to server.</p>';
+                // If Firebase fails to initialize, show a clear error message to the user.
+                document.getElementById('loading-screen').innerHTML = '<p class="text-red-500 text-center">सर्वर से कनेक्ट करने में त्रुटि। कृपया अपना इंटरनेट कनेक्शन जांचें।</p>';
             }
         }
 
+        /**
+         * Sets up a real-time listener for user data.
+         * @param {string} uid The user ID.
+         */
         async function setupUser(uid) {
             const userRef = doc(db, "ffusers", uid);
+            // First, unsubscribe from any previous listener
             if(unsubscribeUser) unsubscribeUser();
 
+            // Then, set up the new listener for the current user's document
             unsubscribeUser = onSnapshot(userRef, (docSnap) => {
                 if (docSnap.exists()) {
+                    // User document exists, update the UI with the data
                     userData = docSnap.data();
                     updateUI();
-                    
-                    const isLoginScreenActive = document.getElementById('main-login-screen').classList.contains('active') ||
-                                                document.getElementById('guest-name-screen').classList.contains('active') ||
-                                                document.getElementById('email-login-screen').classList.contains('active') ||
-                                                document.getElementById('email-signup-screen').classList.contains('active');
-
-                    if (document.getElementById('loading-screen').classList.contains('active') || isLoginScreenActive) {
-                        showScreen('home-screen');
-                    }
+                    showScreen('home-screen');
                 } else {
-                    console.warn(`User document for ${uid} does not exist yet. Waiting for creation by signup/guest flow...`);
+                    console.warn(`User document for ${uid} does not exist yet.`);
+                    // If the user document doesn't exist, create it.
+                    // This handles new users who just signed up.
+                    setDoc(userRef, {
+                        name: auth.currentUser.displayName || auth.currentUser.email || "Guest",
+                        uid: auth.currentUser.uid,
+                        coins: 0,
+                        createdAt: serverTimestamp()
+                    }).then(() => {
+                        // After creation, show the home screen
+                        showScreen('home-screen');
+                    });
                 }
             }, (error) => {
                 console.error("Error in user snapshot listener:", error);
-                showMessageModal("Connection Error", "Could not sync user data.");
+                showMessageModal("Connection Error", "Could not sync user data. Please try again later.");
             });
         }
 
+        /**
+         * Updates the UI with the latest user data.
+         */
         function updateUI() {
             if (!userData) return;
             document.getElementById('welcome-message').textContent = `नमस्ते, ${userData.name}!`;
@@ -437,7 +462,7 @@
             document.getElementById('user-id-display').textContent = userData.uid;
         }
 
-        // --- LOGIN/SIGNUP HANDLERS ---
+        // --- Login and Signup Handlers ---
         async function handleGuestSignIn() {
             const name = document.getElementById('guest-name-input').value.trim();
             if (!name) {
@@ -445,15 +470,8 @@
                 return;
             }
             try {
-                const userCredential = await signInAnonymously(auth);
-                const user = userCredential.user;
-                const userRef = doc(db, "ffusers", user.uid);
-                await setDoc(userRef, {
-                    name: name,
-                    uid: user.uid,
-                    coins: 0,
-                    createdAt: serverTimestamp()
-                });
+                // Sign in anonymously
+                await signInAnonymously(auth);
             } catch (error) {
                 console.error("Guest sign-in error:", error);
                 showMessageModal("Error", "Could not sign in as guest.");
@@ -473,16 +491,8 @@
             }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-                const userRef = doc(db, "ffusers", user.uid);
-                await setDoc(userRef, {
-                    name: name,
-                    email: email,
-                    uid: user.uid,
-                    coins: 0,
-                    createdAt: serverTimestamp()
-                });
+                // Create a new user with email and password
+                await createUserWithEmailAndPassword(auth, email, password);
             } catch (error) {
                 console.error("Signup error:", error.code, error.message);
                 if (error.code === 'auth/email-already-in-use') {
@@ -504,6 +514,7 @@
                 showToast("कृपया ईमेल और पासवर्ड दर्ज करें।"); return;
             }
             try {
+                // Sign in with email and password
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
                 console.error("Login error:", error.code, error.message);
@@ -521,9 +532,31 @@
                 showMessageModal("Error", "Could not log out.");
             });
         }
+        
+        // --- Coin Earning Logic ---
+        async function addCoins() {
+            if (userId) {
+                const value = 0.5; // Fixed value for earning coins
+                const userRef = doc(db, "ffusers", userId);
+                try {
+                    await updateDoc(userRef, {
+                        coins: increment(value)
+                    });
+                    showMessageModal("सफलता!", `आपके खाते में +${value.toFixed(2)} कॉइन जोड़ दिए गए हैं।`, () => {
+                        hideModals();
+                        showScreen('home-screen', true);
+                    });
+                } catch (error) {
+                    console.error("Error updating coins:", error);
+                    showToast("Error updating coins.");
+                }
+            } else {
+                showMessageModal("Error", "You must be logged in to claim coins.");
+            }
+        }
 
 
-        // --- EVENT LISTENERS & LOGIC ---
+        // --- Event Listeners ---
         window.addEventListener('load', () => {
             initializeFirebase();
         });
@@ -566,49 +599,31 @@
             }
         });
 
-        document.getElementById('earn-btn').addEventListener('click', () => showScreen('earn-screen'));
+        // The earn button now navigates and then automatically adds coins after a delay
+        document.getElementById('earn-btn').addEventListener('click', () => {
+            showScreen('earn-screen');
+            // This is the key part of the logic. We use a timer to simulate a user
+            // having enough time to interact with the ad before getting the reward.
+            // This bypasses the security restriction of not being able to detect
+            // if a user actually left the page and came back.
+            setTimeout(addCoins, 5000); // Wait 5 seconds, then add coins
+        });
         document.getElementById('withdraw-btn').addEventListener('click', () => showScreen('withdraw-screen'));
         document.getElementById('logout-btn').addEventListener('click', handleLogout);
-
-        document.querySelectorAll('.banner-overlay').forEach(overlay => {
-            overlay.addEventListener('click', async () => {
-                if (overlay.classList.contains('clicked')) return; 
-
-                const wrapper = overlay.parentElement;
-                const value = parseFloat(wrapper.dataset.value);
-
-                if (userId && value) {
-                    overlay.classList.add('clicked'); 
-                    const userRef = doc(db, "ffusers", userId);
-                    try {
-                        await updateDoc(userRef, {
-                            coins: increment(value)
-                        });
-                        showToast(`+${value.toFixed(2)} coins earned!`, 2000);
-                    } catch (error) {
-                        console.error("Error updating coins:", error);
-                        showToast("Error updating coins.", 3000);
-                        overlay.classList.remove('clicked'); 
-                    }
-
-                    setTimeout(() => {
-                        overlay.classList.remove('clicked');
-                    }, 5000); 
-                }
-            });
-        });
-
+        
         // Withdraw Screen Logic
         const offers = {
-            "Free Fire": [
-                { coins: 100, diamonds: 100 },
-                { coins: 500, diamonds: 510 },
-                { coins: 1000, diamonds: 1500 }
-            ],
-            "BGMI": [
-                { coins: 100, uc: 100 },
-                { coins: 500, uc: 510 },
-                { coins: 1000, uc: 1500 }
+            "Google Play": [
+                { coins: 200, redeem: 30 },
+                { coins: 400, redeem: 60 },
+                { coins: 600, redeem: 90 },
+                { coins: 800, redeem: 120 },
+                { coins: 1000, redeem: 150 },
+                { coins: 1200, redeem: 180 },
+                { coins: 1400, redeem: 210 },
+                { coins: 1600, redeem: 240 },
+                { coins: 1800, redeem: 270 },
+                { coins: 2000, redeem: 300 },
             ]
         };
 
@@ -616,8 +631,8 @@
             btn.addEventListener('click', () => {
                 const game = btn.dataset.game;
                 const gameOffers = offers[game];
-                const currency = game === "Free Fire" ? "Diamonds" : "UC";
-                document.getElementById('offer-title').textContent = `${game} ${currency}`;
+                
+                document.getElementById('offer-title').textContent = `${game} Offers`;
                 
                 const container = document.getElementById('offers-container');
                 container.innerHTML = ''; 
@@ -626,8 +641,8 @@
                     const card = document.createElement('div');
                     card.className = 'offer-card text-center';
                     card.innerHTML = `
-                        <p class="text-3xl font-bold text-yellow-400">${offer.diamonds || offer.uc}</p>
-                        <p class="text-lg">${currency}</p>
+                        <p class="text-3xl font-bold text-yellow-400">₹${offer.redeem}</p>
+                        <p class="text-lg">Redeem Code</p>
                         <p class="mt-4 bg-gray-800 inline-block px-4 py-1 rounded-full">${offer.coins} Coins</p>
                     `;
                     card.addEventListener('click', () => handleOfferClick(offer, game));
@@ -640,7 +655,8 @@
         function handleOfferClick(offer, game) {
             if (userData && userData.coins >= offer.coins) {
                 currentOffer = { ...offer, game };
-                document.getElementById('uid-modal-title').textContent = `Enter Your ${game} ID`;
+                document.getElementById('uid-modal-title').textContent = `Enter Your Email for Redeem Code`;
+                document.getElementById('uid-input').placeholder = "Enter your email here";
                 modalContainer.classList.remove('hidden');
                 document.getElementById('uid-modal').classList.remove('hidden');
                 document.getElementById('message-modal').classList.add('hidden');
@@ -654,9 +670,9 @@
         document.getElementById('message-modal-ok-btn').addEventListener('click', hideModals);
         
         document.getElementById('uid-submit-btn').addEventListener('click', async () => {
-            const gameUid = document.getElementById('uid-input').value.trim();
-            if (gameUid === '') {
-                showToast("Please enter a valid UID.", 3000);
+            const emailAddress = document.getElementById('uid-input').value.trim();
+            if (emailAddress === '') {
+                showToast("Please enter a valid email address.", 3000);
                 return;
             }
             
@@ -677,12 +693,12 @@
                     userId: userId,
                     game: currentOffer.game,
                     offer: currentOffer,
-                    gameUid: gameUid,
+                    email: emailAddress,
                     status: "pending",
                     createdAt: serverTimestamp()
                 });
 
-                showMessageModal("सफलता!", "डायमंड/यूसी 24 घंटे के भीतर आपके खाते में जमा कर दिए जाएंगे।", () => {
+                showMessageModal("सफलता!", "आपका Google Play redeem code 24 घंटे के भीतर आपके ईमेल पर भेज दिया जाएगा।", () => {
                     hideModals();
                     showScreen('home-screen', true);
                 });
