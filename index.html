@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="58e2954bf0a854d2f0d747ecce1e8bbc">
     <meta name="b448b54f4ed44237d86986f5a565b98127a55ba8" content="b448b54f4ed44237d86986f5a565b98127a55ba8" />
+    <meta name="verify-admitad" content="c6ee17c1b2" />
     <title>BISHNOI 29 - रिवॉर्ड ऐप</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
@@ -15,870 +16,580 @@
             font-family: 'Inter', sans-serif;
             background-color: #151A25; /* गहरा नीला-बैंगनी */
             color: #E0E7FF; /* हल्का नीला-सफेद */
-            overflow-x: hidden; /* क्षैतिज स्क्रॉलिंग को रोकें */
+            overflow-x: hidden;
+            touch-action: pan-y;
         }
-        .app-wrapper {
-            width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
-            background-color: #1A202C; /* थोड़ा हल्का गहरा नीला */
-            min-height: 100vh;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden; /* स्क्रीन ट्रांजीशन के लिए */
-        }
-        main {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+
         .screen {
             display: none;
             flex-direction: column;
-            width: 100%;
-            flex-grow: 1;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            transform: translateX(100%); /* डिफ़ॉल्ट रूप से ऑफ़स्क्रीन */
-            opacity: 0;
-            padding: 1.5rem; /* सुनिश्चित करें कि सभी स्क्रीन में पैडिंग हो */
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            position: relative;
         }
+
         .screen.active {
             display: flex;
-            transform: translateX(0); /* सक्रिय होने पर ऑनस्क्रीन */
-            opacity: 1;
-        }
-        .screen.prev { /* पिछली स्क्रीन के लिए जो बाईं ओर स्लाइड होती है */
-            transform: translateX(-100%);
-            opacity: 0;
-        }
-        .screen.next { /* अगली स्क्रीन के लिए जो दाईं ओर स्लाइड होती है */
-            transform: translateX(100%);
-            opacity: 0;
         }
 
-        /* हेडिंग के लिए पोपिंस फ़ॉन्ट */
-        h1, h2, h3 {
-            font-family: 'Poppins', sans-serif;
-            color: #FFFFFF;
-        }
-
-        .button-primary {
-            background: linear-gradient(90deg, #FF6B6B, #FFB86B); /* नरम लाल से नारंगी */
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-        .button-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.6);
-        }
-        .button-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1) translate(-50%, -50%);
-            transition: all 0.5s ease-out;
-        }
-        .button-primary:active::after {
-            transform: scale(20) translate(-50%, -50%);
-            opacity: 1;
-            transition: 0s;
-        }
-
-        .button-secondary {
-            background-color: #3B4455; /* ग्रे-नीला */
-            color: #E0E7FF;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            border: none;
-        }
-        .button-secondary:hover {
-            transform: translateY(-2px);
-            background-color: #4A5568;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .offer-card {
-            background-color: #2D3748; /* गहरा ग्रे */
-            border-radius: 1.25rem; /* अधिक गोल कोने */
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        .offer-card:hover {
-            border-color: #FFB86B; /* नारंगी हाइलाइट */
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-        
-        .modal-backdrop {
+        .modal {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 40;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .modal-backdrop.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal {
-            background-color: #1A202C;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            width: 90%;
-            max-width: 400px;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .modal-backdrop.active .modal {
-            transform: translateY(0);
-            opacity: 1;
+            z-index: 50;
         }
 
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #48bb78; /* हरा */
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            z-index: 100;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .modal-content {
+            background-color: #1E293B;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
         }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        .login-input {
-            background-color: #2D3748; /* गहरा ग्रे */
-            border: 1px solid #4A5568; /* मध्यम ग्रे */
-            color: #E0E7FF;
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
+
+        .card {
+            background-color: #1E293B;
+            border-radius: 1rem;
+            padding: 1.5rem;
             width: 100%;
-            transition: all 0.3s ease;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
-        .login-input::placeholder {
-            color: #A0AEC0; /* हल्का ग्रे */
+
+        .gradient-text {
+            background: linear-gradient(90deg, #6366F1, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .login-input:focus {
-            outline: none;
-            border-color: #FF6B6B; /* लाल */
-            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.3);
-            background-color: #3B4455;
+
+        .lucide-icon {
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
         }
-        .header-bg {
-            background-color: #2D3748;
-            border-radius: 1.5rem;
-            padding: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        
+        /* ऑफर कार्ड्स के लिए विशिष्ट शैली */
+        .offer-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .coin-display {
-            background-color: #2D3748;
-            padding: 0.75rem 1.25rem;
-            border-radius: 9999px;
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* वीडियो प्लेयर के लिए शैली */
+        #video-player-modal .modal-content {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            background-color: #151A25;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            padding: 0;
+        }
+
+        #video-player-modal video {
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            object-fit: contain;
+        }
+
+        #video-player-modal .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            padding: 0.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
         }
     </style>
 </head>
-<body>
-    <div class="app-wrapper">
-        <main>
-            <!-- लोडिंग स्क्रीन -->
-            <div id="loading-screen" class="screen active justify-center items-center p-8">
-                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-400"></div>
-                <h1 class="text-3xl font-bold mt-8 text-white">ऐप लोड हो रहा है...</h1>
-            </div>
-
-            <!-- मुख्य लॉगिन स्क्रीन -->
-            <div id="main-login-screen" class="screen flex-col justify-center items-center p-8 space-y-6 text-center">
-                <h2 class="text-4xl font-bold text-white mb-8">BISHNOI 29 में आपका स्वागत है! 💎</h2>
-                <button id="email-signup-btn" class="button-primary w-full max-w-sm">साइन अप करें (ईमेल/पासवर्ड)</button>
-                <button id="email-login-btn" class="button-secondary w-full max-w-sm">लॉग इन करें (ईमेल/पासवर्ड)</button>
-                <button id="continue-as-guest-btn" class="button-secondary w-full max-w-sm">गेस्ट के रूप में जारी रखें</button>
-            </div>
-            
-            <!-- गेस्ट का नाम स्क्रीन -->
-            <div id="guest-name-screen" class="screen flex-col justify-center items-center p-8 space-y-6">
-                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                <h2 class="text-3xl font-bold text-white">आपका नाम क्या है?</h2>
-                <input type="text" id="guest-name-input" placeholder="अपना नाम दर्ज करें" class="login-input w-full max-w-sm text-lg text-center">
-                <button id="create-guest-user-btn" class="button-primary w-full max-w-sm">आगे बढ़ें</button>
-            </div>
-
-            <!-- ईमेल साइन अप स्क्रीन -->
-            <div id="email-signup-screen" class="screen flex-col justify-center items-center p-8 space-y-4">
-                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                <h2 class="text-3xl font-bold text-white mb-4">खाता बनाएँ</h2>
-                <input type="text" id="signup-name-input" placeholder="अपना पूरा नाम दर्ज करें" class="login-input w-full max-w-sm">
-                <input type="email" id="signup-email-input" placeholder="ईमेल दर्ज करें" class="login-input w-full max-w-sm">
-                <input type="password" id="signup-password-input" placeholder="पासवर्ड दर्ज करें (न्यूनतम 6 अक्षर)" class="login-input w-full max-w-sm">
-                <button id="signup-btn" class="button-primary w-full max-w-sm mt-4">साइन अप करें</button>
-            </div>
-            
-            <!-- ईमेल लॉगिन स्क्रीन -->
-            <div id="email-login-screen" class="screen flex-col justify-center items-center p-8 space-y-4">
-                <button class="back-btn absolute top-6 left-6 p-3 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                <h2 class="text-3xl font-bold text-white mb-4">लॉग इन करें</h2>
-                <input type="email" id="login-email-input" placeholder="ईमेल दर्ज करें" class="login-input w-full max-w-sm">
-                <input type="password" id="login-password-input" placeholder="पासवर्ड दर्ज करें" class="login-input w-full max-w-sm">
-                <button id="email-login-submit-btn" class="button-primary w-full max-w-sm mt-4">लॉग इन करें</button>
-            </div>
-
-            <!-- होम स्क्रीन -->
-            <div id="home-screen" class="screen p-6 space-y-6">
-                <header class="flex justify-between items-center header-bg">
-                    <h1 id="welcome-message" class="text-2xl font-bold">नमस्ते, उपयोगकर्ता!</h1>
-                    <div class="coin-display">
-                        <i data-lucide="gem" class="text-yellow-400"></i>
-                        <span id="coin-balance" class="font-bold text-lg">0.00</span>
-                    </div>
-                </header>
-
-                <div class="bg-gray-800 p-4 rounded-xl space-y-2 shadow-lg">
-                    <p class="text-sm text-gray-400">आपकी यूजर आईडी</p>
-                    <div class="flex items-center justify-between gap-4">
-                        <p id="user-id-display" class="font-mono text-sm break-all bg-gray-900 p-2 rounded-lg flex-grow"></p>
-                        <button id="copy-id-btn" class="button-secondary px-3 py-2 rounded-lg">कॉपी</button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-4 pt-4">
-                    <button id="earn-btn" class="button-primary py-4 text-lg flex items-center justify-center gap-3">
-                        <i data-lucide="dollar-sign"></i>
-                        <span>फ्री कॉइंस पाएं</span>
-                    </button>
-                    <button id="withdraw-btn" class="button-secondary py-4 text-lg flex items-center justify-center gap-3">
-                        <i data-lucide="send"></i>
-                        <span>निकालें (Withdraw)</span>
-                    </button>
-                    <button id="tasks-btn" class="button-secondary py-4 text-lg flex items-center justify-center gap-3">
-                        <i data-lucide="clipboard-list"></i>
-                        <span>कार्य और ऑफ़र</span>
-                    </button>
-                </div>
-                 <button id="logout-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl mt-4 shadow-lg transition-all duration-300">लॉग आउट</button>
-            </div>
-
-            <!-- कॉइंस कमाएं स्क्रीन -->
-            <div id="earn-screen" class="screen p-6 space-y-6">
-                <header class="flex items-center">
-                    <button class="back-btn p-2 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                    <h1 class="text-xl font-bold mx-auto">कॉइंस कमाएं</h1>
-                </header>
-                <div class="bg-blue-700 p-4 rounded-xl text-white text-center font-bold shadow-lg animate-pulse">
-                    <p>विज्ञापन पर क्लिक करें। 5 सेकंड में कॉइन आपके खाते में जुड़ जाएंगे।</p>
-                </div>
-                <div id="banners-container" class="space-y-6">
-                    <div class="p-2 bg-gray-800 rounded-lg shadow-md">
-                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 1</p>
-                        <script async="async" data-cfasync="false" src="//pl27209153.profitableratecpm.com/4e2d6d16c1332f7c73b28bca760b3ec9/invoke.js"></script>
-                        <div id="container-4e2d6d16c1332f7c73b28bca760b3ec9"></div>
-                    </div>
-                     <div class="p-2 bg-gray-800 rounded-lg shadow-md">
-                        <p class="text-center text-xs text-gray-500 mb-1">विज्ञापन 2</p>
-                        <script type="text/javascript">
-                            atOptions = {
-                                'key' : '0d15173de61272c3e2bb15f8677bb5c5',
-                                'format' : 'iframe',
-                                'height' : 250,
-                                'width' : 300,
-                                'params' : {}
-                            };
-                        </script>
-                        <script type="text/javascript" src="//www.highperformanceformat.com/0d15173de61272c3e2bb15f8677bb5c5/invoke.js"></script>
-                    </div>
-                    <!-- रिवॉर्डेड वीडियो विज्ञापन प्लेसहोल्डर -->
-                    <button id="rewarded-video-btn" class="button-primary w-full py-3 text-lg flex items-center justify-center gap-3">
-                        <i data-lucide="monitor-play"></i>
-                        <span>वीडियो देखें और कॉइंस कमाएं</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- निकासी स्क्रीन -->
-            <div id="withdraw-screen" class="screen p-6 space-y-6">
-                <header class="flex items-center">
-                    <button class="back-btn p-2 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                    <h1 class="text-xl font-bold mx-auto">निकालें</h1>
-                </header>
-                <div class="grid grid-cols-1 gap-4 pt-8">
-                    <button class="withdraw-option-btn button-primary py-8 text-2xl" data-game="Google Play">
-                        Google Play Redeem Code
-                    </button>
-                    <button class="withdraw-option-btn button-secondary py-8 text-2xl" data-game="Amazon">
-                        Amazon गिफ्ट कार्ड
-                    </button>
-                </div>
-            </div>
-            
-            <!-- ऑफर स्क्रीन -->
-            <div id="offer-screen" class="screen p-6 space-y-6">
-                 <header class="flex items-center">
-                    <button class="back-btn p-2 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                    <h1 id="offer-title" class="text-xl font-bold mx-auto">ऑफर</h1>
-                </header>
-                <div id="offers-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-                </div>
-            </div>
-
-            <!-- कार्य स्क्रीन (नया) -->
-            <div id="tasks-screen" class="screen p-6 space-y-6">
-                <header class="flex items-center">
-                    <button class="back-btn p-2 rounded-full hover:bg-gray-700 text-white"><i data-lucide="arrow-left"></i></button>
-                    <h1 class="text-xl font-bold mx-auto">कार्य और ऑफ़र</h1>
-                </header>
-                <div class="bg-purple-700 p-4 rounded-xl text-white text-center font-bold shadow-lg">
-                    <p>यहां और कॉइंस कमाने के लिए रोमांचक कार्य पूरे करें!</p>
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="offer-card flex items-center gap-4">
-                        <i data-lucide="download" class="text-green-400 text-3xl"></i>
-                        <div>
-                            <h3 class="font-bold text-lg">ऐप इंस्टॉल करें</h3>
-                            <p class="text-gray-400 text-sm">नए ऐप्स इंस्टॉल करके 50-200 कॉइंस कमाएं।</p>
-                        </div>
-                        <button class="ml-auto button-primary px-4 py-2 text-sm">शुरू करें</button>
-                    </div>
-                     <div class="offer-card flex items-center gap-4">
-                        <i data-lucide="message-square" class="text-blue-400 text-3xl"></i>
-                        <div>
-                            <h3 class="font-bold text-lg">सर्वेक्षण पूरा करें</h3>
-                            <p class="text-gray-400 text-sm">त्वरित सर्वेक्षणों का जवाब देकर 30-100 कॉइंस कमाएं।</p>
-                        </div>
-                        <button class="ml-auto button-primary px-4 py-2 text-sm">शुरू करें</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- मोडल और टोस्ट -->
-    <div id="modal-container" class="modal-backdrop hidden">
-        <div id="uid-modal" class="modal space-y-4 hidden">
-            <h3 id="uid-modal-title" class="text-2xl font-bold text-center"></h3>
-            <input type="email" id="uid-input" placeholder="कृपया अपना ईमेल/UID यहां दर्ज करें" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:border-red-500 text-white">
-            <div class="flex gap-4">
-                <button id="uid-cancel-btn" class="flex-1 button-secondary">रद्द करें</button>
-                <button id="uid-submit-btn" class="flex-1 button-primary">जमा करें</button>
-            </div>
-        </div>
-        <div id="message-modal" class="modal space-y-4 text-center hidden">
-             <h3 id="message-modal-title" class="text-2xl font-bold">संदेश</h3>
-             <p id="message-modal-text" class="text-gray-300 mt-2"></p>
-             <button id="message-modal-ok-btn" class="w-full button-primary mt-4">ठीक है</button>
+<body class="bg-[#151A25] text-[#E0E7FF] font-sans">
+    
+    <!-- मुख्य स्क्रीन -->
+    <div id="main-screen" class="screen active">
+        <div class="card p-8 text-center bg-[#1E293B] rounded-2xl shadow-lg">
+            <h1 class="text-4xl font-bold font-poppins text-white mb-2">BISHNOI 29</h1>
+            <h2 class="text-xl font-semibold mb-6 gradient-text">रिवॉर्ड ऐप</h2>
+            <p class="text-lg mb-8">अपने गेम और एप्लिकेशन के लिए रिवॉर्ड प्राप्त करें!</p>
+            <button id="start-button" class="w-full py-3 px-6 bg-[#6366F1] text-white rounded-xl font-semibold text-lg hover:bg-[#4F46E5] transition-colors duration-300 transform hover:scale-105">
+                प्रारंभ करें
+            </button>
         </div>
     </div>
-    <div id="toast-container"></div>
+    
+    <!-- होम स्क्रीन -->
+    <div id="home-screen" class="screen">
+        <div class="card p-6 bg-[#1E293B] rounded-2xl shadow-lg w-full max-w-lg relative">
+            <div class="absolute top-4 left-4 p-2 bg-[#1A202C] rounded-full text-[#6366F1] flex items-center justify-center">
+                <span id="user-points" class="font-bold text-lg mr-1">0</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gem"><path d="M6 3h12l3 9-9 9-9-9z"/><path d="M12 21V3"/></svg>
+            </div>
+            <div class="flex justify-center mb-6">
+                <img src="https://placehold.co/100x100/151A25/FFFFFF?text=Logo" alt="App Logo" class="rounded-full">
+            </div>
+            <h1 class="text-3xl font-bold text-center mb-4">रिवॉर्ड्स</h1>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Google Play कार्ड -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Google+Play" alt="Google Play Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">Google Play</h3>
+                    <p class="text-sm text-gray-400">रिवॉर्ड प्राप्त करें</p>
+                </div>
+                
+                <!-- Free Fire कार्ड -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Free+Fire" alt="Free Fire Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">Free Fire</h3>
+                    <p class="text-sm text-gray-400">रिवॉर्ड प्राप्त करें</p>
+                </div>
+            </div>
 
+            <button id="claim-button" class="w-full py-3 mt-6 bg-[#8B5CF6] text-white rounded-xl font-semibold text-lg hover:bg-[#7C3AED] transition-colors duration-300">
+                रिवॉर्ड का दावा करें
+            </button>
+        </div>
+    </div>
+    
+    <!-- रिवॉर्ड स्क्रीन -->
+    <div id="rewards-screen" class="screen">
+        <div class="card p-6 bg-[#1E293B] rounded-2xl shadow-lg w-full max-w-xl">
+            <div class="flex items-center justify-between mb-4">
+                <button id="back-to-home-button" class="flex items-center text-[#9CA3AF] hover:text-[#E0E7FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg>
+                    <span class="ml-2">वापस</span>
+                </button>
+                <h1 id="rewards-title" class="text-2xl font-bold font-poppins text-center flex-grow">रिवॉर्ड्स</h1>
+            </div>
+            
+            <!-- Google Play ऑफर -->
+            <div id="google-play-offers" class="offer-grid grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8" style="display: none;">
+                <!-- ऑफर 1 -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Google+Play" alt="Google Play Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">₹100</h3>
+                    <p class="text-sm text-gray-400">आवश्यक: 2000 अंक</p>
+                    <button class="claim-offer-button mt-2 py-1 px-4 bg-[#6366F1] text-white rounded-md text-sm hover:bg-[#4F46E5]">दावा करें</button>
+                </div>
+                <!-- ऑफर 2 -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Google+Play" alt="Google Play Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">₹500</h3>
+                    <p class="text-sm text-gray-400">आवश्यक: 10000 अंक</p>
+                    <button class="claim-offer-button mt-2 py-1 px-4 bg-[#6366F1] text-white rounded-md text-sm hover:bg-[#4F46E5]">दावा करें</button>
+                </div>
+            </div>
+            
+            <!-- Free Fire ऑफर -->
+            <div id="free-fire-offers" class="offer-grid grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8" style="display: none;">
+                <!-- ऑफर 1 -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Free+Fire" alt="Free Fire Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">100 हीरे</h3>
+                    <p class="text-sm text-gray-400">आवश्यक: 1500 अंक</p>
+                    <button class="claim-offer-button mt-2 py-1 px-4 bg-[#6366F1] text-white rounded-md text-sm hover:bg-[#4F46E5]">दावा करें</button>
+                </div>
+                <!-- ऑफर 2 -->
+                <div class="offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center">
+                    <img src="https://placehold.co/80x80/2D3748/FFFFFF?text=Free+Fire" alt="Free Fire Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">500 हीरे</h3>
+                    <p class="text-sm text-gray-400">आवश्यक: 7500 अंक</p>
+                    <button class="claim-offer-button mt-2 py-1 px-4 bg-[#6366F1] text-white rounded-md text-sm hover:bg-[#4F46E5]">दावा करें</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ऑफर स्क्रीन -->
+    <div id="offer-screen" class="screen">
+        <div class="card p-6 bg-[#1E293B] rounded-2xl shadow-lg w-full max-w-xl">
+            <div class="flex items-center justify-between mb-4">
+                <button id="back-to-rewards-button" class="flex items-center text-[#9CA3AF] hover:text-[#E0E7FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg>
+                    <span class="ml-2">वापस</span>
+                </button>
+                <h1 class="text-2xl font-bold font-poppins text-center flex-grow">वीडियो विज्ञापन देखें</h1>
+            </div>
+
+            <p class="text-center text-sm text-[#9CA3AF] mb-6">आवश्यक: <span id="offer-points-required" class="font-bold text-[#E0E7FF]">0</span> अंक</p>
+            
+            <div class="flex flex-col items-center mb-6">
+                <button id="watch-ad-button" class="w-full py-4 px-6 bg-green-500 text-white rounded-xl font-bold text-xl flex items-center justify-center hover:bg-green-600 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play-circle mr-2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                    वीडियो देखें
+                </button>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-400">वीडियो देखने के बाद, आपको अंक मिलेंगे।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- निकासी स्क्रीन -->
+    <div id="withdrawal-screen" class="screen">
+        <div class="card p-6 bg-[#1E293B] rounded-2xl shadow-lg w-full max-w-xl">
+            <div class="flex items-center justify-between mb-4">
+                <button id="back-from-withdrawal" class="flex items-center text-[#9CA3AF] hover:text-[#E0E7FF] transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-circle"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg>
+                    <span class="ml-2">वापस</span>
+                </button>
+                <h1 id="withdrawal-title" class="text-2xl font-bold font-poppins text-center flex-grow">रिवॉर्ड निकालें</h1>
+            </div>
+            
+            <div id="withdrawal-detail-container" class="mt-4">
+                <!-- विशिष्ट इनपुट यहाँ JS द्वारा जोड़े जाएंगे -->
+            </div>
+
+            <button id="submit-withdrawal-button" class="w-full py-3 mt-6 bg-[#6366F1] text-white rounded-xl font-semibold text-lg hover:bg-[#4F46E5] transition-colors duration-300">
+                सबमिट करें
+            </button>
+        </div>
+    </div>
+
+    <!-- लोडिंग स्क्रीन -->
+    <div id="loading-screen" class="screen fixed top-0 left-0 w-full h-full bg-[#151A25] z-50">
+        <div class="flex flex-col items-center justify-center">
+            <div class="w-12 h-12 border-4 border-t-4 border-[#6366F1] rounded-full animate-spin border-gray-200 mb-4"></div>
+            <p class="text-lg text-white">लोड हो रहा है...</p>
+        </div>
+    </div>
+
+    <!-- modals -->
+    <!-- सामान्य संदेश मॉडल -->
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content bg-[#1E293B]">
+            <h2 id="message-title" class="text-2xl font-bold mb-4"></h2>
+            <p id="message-body" class="mb-6"></p>
+            <button id="message-close-button" class="w-full py-2 px-4 bg-[#6366F1] text-white rounded-lg font-semibold hover:bg-[#4F46E5]">ओके</button>
+        </div>
+    </div>
+    
+    <!-- वीडियो प्लेयर मॉडल -->
+    <div id="video-player-modal" class="modal hidden">
+        <div class="modal-content relative">
+            <button id="video-close-button" class="close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <video id="reward-video" controls playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-girl-staring-at-her-smartphone-4467-large.mp4" type="video/mp4">
+                आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता।
+            </video>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
     <script type="module">
-        // Firebase मॉड्यूल आयात करें
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, increment, collection, addDoc, serverTimestamp, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, collection, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- Firebase कॉन्फ़िगरेशन और ग्लोबल वैरिएबल ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyAkkS8wmSnkQfTGydbPe-i1C7mO0w5z8j4",
-            authDomain: "jai-shree-ram-a9e73.firebaseapp.com",
-            projectId: "jai-shree-ram-a9e73",
-            storageBucket: "jai-shree-ram-a9e73.appspot.com",
-            messagingSenderId: "557868202170",
-            appId: "1:557868202170:web:a2627a26b7ee452075aa83"
-        };
+        // Firebase कॉन्फ़िगरेशन और इनिशियलाइज़ेशन
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const userId = typeof __initial_auth_token !== 'undefined' ? auth.currentUser?.uid : crypto.randomUUID();
+        const firestoreUserId = typeof __initial_auth_token !== 'undefined' ? auth.currentUser?.uid : 'anonymous';
+
+        // Firebase ऑथेंटिकेशन
+        const authPromise = new Promise(async (resolve, reject) => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                console.log("Firebase Auth successful");
+                resolve();
+            } catch (error) {
+                console.error("Firebase Auth failed:", error);
+                reject(error);
+            }
+        });
         
-        let app, db, auth, currentUser, userData, userId, unsubscribeUser;
-        let screenHistory = [];
+        let userPoints = 0;
+        let isAuthReady = false;
         let currentOffer = null;
 
-        // --- DOM एलिमेंट्स ---
-        const allScreens = document.querySelectorAll('.screen');
-        const modalContainer = document.getElementById('modal-container');
+        const screens = {
+            'main-screen': document.getElementById('main-screen'),
+            'home-screen': document.getElementById('home-screen'),
+            'rewards-screen': document.getElementById('rewards-screen'),
+            'offer-screen': document.getElementById('offer-screen'),
+            'withdrawal-screen': document.getElementById('withdrawal-screen'),
+            'loading-screen': document.getElementById('loading-screen')
+        };
+        const modals = {
+            'message-modal': document.getElementById('message-modal'),
+            'video-player-modal': document.getElementById('video-player-modal')
+        };
+        const dom = {
+            startButton: document.getElementById('start-button'),
+            claimButton: document.getElementById('claim-button'),
+            backToHomeButton: document.getElementById('back-to-home-button'),
+            backFromWithdrawal: document.getElementById('back-from-withdrawal'),
+            backToRewardsButton: document.getElementById('back-to-rewards-button'),
+            googlePlayCard: document.querySelector('.offer-card[alt="Google Play Icon"]').parentElement,
+            freeFireCard: document.querySelector('.offer-card[alt="Free Fire Icon"]').parentElement,
+            rewardsTitle: document.getElementById('rewards-title'),
+            googlePlayOffers: document.getElementById('google-play-offers'),
+            freeFireOffers: document.getElementById('free-fire-offers'),
+            userPointsElement: document.getElementById('user-points'),
+            offerPointsRequired: document.getElementById('offer-points-required'),
+            watchAdButton: document.getElementById('watch-ad-button'),
+            submitWithdrawalButton: document.getElementById('submit-withdrawal-button'),
+            withdrawalTitle: document.getElementById('withdrawal-title'),
+            withdrawalDetailContainer: document.getElementById('withdrawal-detail-container'),
+            messageTitle: document.getElementById('message-title'),
+            messageBody: document.getElementById('message-body'),
+            messageCloseButton: document.getElementById('message-close-button'),
+            videoPlayer: document.getElementById('reward-video'),
+            videoCloseButton: document.getElementById('video-close-button'),
+        };
 
-        // --- मुख्य एप्लिकेशन फ़्लो और UI प्रबंधन ---
-        /**
-         * सभी स्क्रीन को छुपाता है और दिए गए ID वाली स्क्रीन को दिखाता है।
-         * इसमें स्क्रीन के बीच स्लाइड ट्रांजीशन भी शामिल है।
-         * @param {string} screenId दिखाने वाली स्क्रीन की ID।
-         * @param {boolean} isNav True यदि यह प्राथमिक नेविगेशन है, False यदि एक उप-स्क्रीन है।
-         * @param {boolean} reverse True यदि पीछे की ओर नेविगेट कर रहे हैं।
-         */
-        function showScreen(screenId, isNav = false, reverse = false) {
-            console.log(`Navigating to: ${screenId}, isNav: ${isNav}, reverse: ${reverse}`);
-            const currentActive = document.querySelector('.screen.active');
-            const targetScreen = document.getElementById(screenId);
-
-            if (currentActive && currentActive.id === screenId) return;
-
-            if (currentActive && !isNav) {
-                screenHistory.push(currentActive.id);
-            } else if (isNav && !reverse) {
-                screenHistory = [];
-            }
-
-            if (currentActive) {
-                currentActive.classList.remove('active');
-                if (reverse) {
-                    currentActive.classList.add('next');
-                } else {
-                    currentActive.classList.add('prev');
-                }
-            }
-
-            if (targetScreen) {
-                targetScreen.classList.remove('prev', 'next');
-                targetScreen.classList.add('active');
-                if (reverse) {
-                    targetScreen.style.transform = 'translateX(-100%)';
-                    setTimeout(() => targetScreen.style.transform = 'translateX(0)', 10);
-                } else {
-                    targetScreen.style.transform = 'translateX(100%)';
-                    setTimeout(() => targetScreen.style.transform = 'translateX(0)', 10);
-                }
-            }
-            
-            lucide.createIcons();
-        }
-
-        /**
-         * इतिहास में पिछली स्क्रीन पर नेविगेट करता है।
-         */
-        function goBack() {
-            if (screenHistory.length > 0) {
-                const lastScreenId = screenHistory.pop();
-                showScreen(lastScreenId, false, true);
-            } else {
-                if (currentUser) {
-                    showScreen('home-screen', true);
-                } else {
-                    showScreen('main-login-screen', true);
-                }
-            }
-        }
-        
-        /**
-         * एक टोस्ट नोटिफिकेशन प्रदर्शित करता है।
-         * @param {string} message प्रदर्शित करने वाला संदेश।
-         * @param {number} duration मिलीसेकंड में अवधि।
-         * @param {string} type 'success', 'error', 'info'
-         */
-        function showToast(message, duration = 3000, type = 'info') {
-            const toastId = `toast-${Date.now()}`;
-            const toast = document.createElement('div');
-            toast.id = toastId;
-            toast.className = `toast ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`;
-            toast.textContent = message;
-            document.getElementById('toast-container').appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 500);
-            }, duration);
-        }
-        
-        /**
-         * एक कस्टम संदेश के साथ एक मोडल दिखाता है।
-         * @param {string} title मोडल शीर्षक।
-         * @param {string} text मोडल टेक्स्ट सामग्री।
-         * @param {function} onOk OK बटन क्लिक करने पर कॉल करने के लिए फ़ंक्शन।
-         */
-        function showMessageModal(title, text, onOk) {
-            document.getElementById('message-modal-title').textContent = title;
-            document.getElementById('message-modal-text').textContent = text;
-            modalContainer.classList.add('active');
-            document.getElementById('message-modal').classList.remove('hidden');
-            document.getElementById('uid-modal').classList.add('hidden');
-
-            const okButton = document.getElementById('message-modal-ok-btn');
-            okButton.onclick = () => {
-                hideModals();
-                if (onOk) onOk();
-            };
-        }
-
-        /**
-         * सभी मोडलों को छुपाता है।
-         */
-        function hideModals() {
-            modalContainer.classList.remove('active');
-            document.getElementById('uid-modal').classList.add('hidden');
-            document.getElementById('message-modal').classList.add('hidden');
-        }
-
-        // --- Firebase इनिशियलाइज़ेशन और प्रमाणीकरण ---
-        async function initializeFirebase() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        currentUser = user;
-                        userId = user.uid;
-                        await setupUser(user.uid, user.displayName || user.email || "Guest");
-                    } else {
-                        currentUser = null;
-                        userId = null;
-                        userData = null;
-                        if(unsubscribeUser) unsubscribeUser();
-                        showScreen('main-login-screen');
-                    }
-                });
-            } catch (error) {
-                console.error("Firebase Init Error:", error);
-                document.getElementById('loading-screen').innerHTML = `
-                    <p class="text-red-500 text-center text-lg">सर्वर से कनेक्ट करने में त्रुटि। कृपया अपना इंटरनेट कनेक्शन जांचें।</p>
-                    <p class="text-gray-400 text-center text-sm mt-2">(${error.message})</p>
-                `;
-            }
-        }
-
-        /**
-         * उपयोगकर्ता डेटा के लिए एक वास्तविक समय श्रोता सेट करता है।
-         * @param {string} uid उपयोगकर्ता ID।
-         * @param {string} userName उपयोगकर्ता का नाम।
-         */
-        async function setupUser(uid, userName) {
-            const userRef = doc(db, "users", uid); 
-
-            if(unsubscribeUser) unsubscribeUser();
-
-            unsubscribeUser = onSnapshot(userRef, async (docSnap) => {
-                if (docSnap.exists()) {
-                    userData = docSnap.data();
-                    updateUI();
-                    showScreen('home-screen');
-                } else {
-                    console.warn(`User document for ${uid} does not exist yet. Creating...`);
-                    // यदि उपयोगकर्ता दस्तावेज़ मौजूद नहीं है, तो उसे बनाएं।
-                    // यह नए उपयोगकर्ताओं को हैंडल करता है जो अभी साइन अप हुए हैं।
-                    const initialUserData = {
-                        name: userName,
-                        uid: uid,
-                        coins: 0,
-                        createdAt: serverTimestamp(),
-                    };
-
-                    try {
-                        await setDoc(userRef, initialUserData);
-                        console.log("User document created.");
-                        // यूआई को अपडेट करने के लिए फिर से डेटा प्राप्त करें (शायद onSnapshot इसे स्वयं हैंडल करेगा, लेकिन सुरक्षा के लिए)
-                        const newDocSnap = await getDoc(userRef);
-                        if (newDocSnap.exists()) {
-                            userData = newDocSnap.data();
-                            updateUI();
-                            showScreen('home-screen');
-                        }
-                    } catch (error) {
-                        console.error("Error creating user document:", error);
-                        showMessageModal("Error", "उपयोगकर्ता प्रोफ़ाइल बनाने में विफल। कृपया पुनः प्रयास करें।");
-                    }
-                }
-            }, (error) => {
-                console.error("Error in user snapshot listener:", error);
-                showMessageModal("कनेक्शन त्रुटि", "उपयोगकर्ता डेटा सिंक नहीं किया जा सका। कृपया बाद में पुनः प्रयास करें।");
-            });
-        }
-
-        /**
-         * यूआई को नवीनतम उपयोगकर्ता डेटा के साथ अपडेट करता है।
-         */
-        function updateUI() {
-            if (!userData) return;
-            document.getElementById('welcome-message').textContent = `नमस्ते, ${userData.name}!`;
-            document.getElementById('coin-balance').textContent = parseFloat(userData.coins || 0).toFixed(2);
-            document.getElementById('user-id-display').textContent = userData.uid;
-        }
-
-        // --- लॉगिन और साइन अप हैंडलर्स ---
-        async function handleGuestSignIn() {
-            const name = document.getElementById('guest-name-input').value.trim();
-            if (!name) {
-                showToast("कृपया अपना नाम दर्ज करें।", 3000, 'error');
-                return;
-            }
-            try {
-                const userCredential = await signInAnonymously(auth);
-                // setupUser को कॉल करें
-                await setupUser(userCredential.user.uid, name);
-            } catch (error) {
-                console.error("गेस्ट साइन-इन त्रुटि:", error);
-                showMessageModal("त्रुटि", "गेस्ट के रूप में साइन इन नहीं किया जा सका।", null, 'error');
-            }
-        }
-
-        async function handleEmailSignup() {
-            const name = document.getElementById('signup-name-input').value.trim();
-            const email = document.getElementById('signup-email-input').value.trim();
-            const password = document.getElementById('signup-password-input').value.trim();
-
-            if (!name || !email || !password) {
-                showToast("कृपया सभी फ़ील्ड भरें।", 3000, 'error'); return;
-            }
-            if (password.length < 6) {
-                showToast("पासवर्ड कम से कम 6 वर्णों का होना चाहिए।", 3000, 'error'); return;
-            }
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                // setupUser को कॉल करें
-                await setupUser(userCredential.user.uid, name);
-            } catch (error) {
-                console.error("साइन अप त्रुटि:", error.code, error.message);
-                let errorMessage = `खाता बनाने में विफलता: ${error.code}`;
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = "यह ईमेल पहले से उपयोग में है। कृपया लॉग इन करें या किसी अन्य ईमेल का उपयोग करें।";
-                } else if (error.code === 'auth/weak-password') {
-                     errorMessage = "पासवर्ड बहुत कमजोर है। कृपया एक मजबूत पासवर्ड चुनें।";
-                } else if (error.code === 'auth/invalid-email') {
-                     errorMessage = "अमान्य ईमेल प्रारूप। कृपया एक मान्य ईमेल दर्ज करें।";
-                }
-                showMessageModal("साइन अप त्रुटि", errorMessage, null, 'error');
-            }
-        }
-
-        async function handleEmailLogin() {
-            const email = document.getElementById('login-email-input').value.trim();
-            const password = document.getElementById('login-password-input').value.trim();
-            if (!email || !password) {
-                showToast("कृपया ईमेल और पासवर्ड दर्ज करें।", 3000, 'error'); return;
-            }
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                // onAuthStateChanged सेटअपUser को कॉल करेगा
-            } catch (error) {
-                console.error("लॉगिन त्रुटि:", error.code, error.message);
-                let errorMessage = `लॉग इन करने में विफलता: ${error.code}`;
-                 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                    errorMessage = "अमान्य ईमेल या पासवर्ड। कृपया पुनः प्रयास करें।";
-                }
-                showMessageModal("लॉगिन त्रुटि", errorMessage, null, 'error');
-            }
-        }
-
-        function handleLogout() {
-            signOut(auth).catch(error => {
-                console.error("लॉग आउट त्रुटि:", error);
-                showMessageModal("त्रुटि", "लॉग आउट नहीं किया जा सका।", null, 'error');
-            });
-        }
-        
-        // --- कॉइन कमाने का लॉजिक ---
-        async function addCoins(value = 0.5) {
-            if (!userId) {
-                showMessageModal("त्रुटि", "कॉइंस का दावा करने के लिए आपको लॉग इन होना चाहिए।", null, 'error');
-                return;
-            }
-
-            const userRef = doc(db, "users", userId); 
-            try {
-                await updateDoc(userRef, {
-                    coins: increment(value)
-                });
-                showMessageModal("सफलता!", `आपके खाते में +${value.toFixed(2)} कॉइन जोड़ दिए गए हैं।`, () => {
-                    hideModals();
-                    showScreen('home-screen', true);
-                }, 'success');
-
-            } catch (error) {
-                console.error("कॉइंस अपडेट करने में त्रुटि:", error);
-                showToast("कॉइंस अपडेट करने में त्रुटि।", 3000, 'error');
-            }
-        }
-
-        // --- इवेंट लिसनर ---
-        window.addEventListener('load', () => {
-            initializeFirebase();
-        });
-
-        document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', goBack));
-        
-        document.getElementById('email-signup-btn').addEventListener('click', () => showScreen('email-signup-screen'));
-        document.getElementById('email-login-btn').addEventListener('click', () => showScreen('email-login-screen'));
-        document.getElementById('continue-as-guest-btn').addEventListener('click', () => showScreen('guest-name-screen'));
-        
-        document.getElementById('create-guest-user-btn').addEventListener('click', handleGuestSignIn);
-        document.getElementById('signup-btn').addEventListener('click', handleEmailSignup);
-        document.getElementById('email-login-submit-btn').addEventListener('click', handleEmailLogin);
-
-        document.getElementById('copy-id-btn').addEventListener('click', async () => {
-            if(!userData || !userData.uid) return;
-            const textToCopy = userData.uid;
-            
-            try {
-                await navigator.clipboard.writeText(textToCopy);
-                showToast("यूजर ID कॉपी की गई!", 3000, 'success');
-            } catch (err) {
-                console.warn("क्लिपबोर्ड API विफल, फॉलबैक का उपयोग कर रहा है। त्रुटि:", err);
-                const textArea = document.createElement("textarea");
-                textArea.value = textToCopy;
-                textArea.style.position = "fixed";
-                textArea.style.top = "-9999px";
-                textArea.style.left = "-9999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast("यूजर ID कॉपी की गई!", 3000, 'success');
-                } catch (execErr) {
-                    console.error('फॉलबैक कॉपी विफल:', execErr);
-                    showToast("कॉपी विफल!", 3000, 'error');
-                }
-                document.body.removeChild(textArea);
-            }
-        });
-
-        document.getElementById('earn-btn').addEventListener('click', () => {
-            showScreen('earn-screen');
-            setTimeout(() => addCoins(0.5), 5000); 
-        });
-        document.getElementById('withdraw-btn').addEventListener('click', () => showScreen('withdraw-screen'));
-        document.getElementById('tasks-btn').addEventListener('click', () => showScreen('tasks-screen'));
-        document.getElementById('logout-btn').addEventListener('click', handleLogout);
-
-        document.getElementById('rewarded-video-btn').addEventListener('click', () => {
-            showMessageModal("वीडियो विज्ञापन", "यहां एक रिवॉर्डेड वीडियो विज्ञापन लोड होगा।", () => {
-                addCoins(2.0);
-            }, 'info');
-        });
-        
         const offers = {
-            "Google Play": [
-                { coins: 200, redeem: 30, type: "Redeem Code" },
-                { coins: 400, redeem: 60, type: "Redeem Code" },
-                { coins: 600, redeem: 90, type: "Redeem Code" },
-                { coins: 800, redeem: 120, type: "Redeem Code" },
-                { coins: 1000, redeem: 150, type: "Redeem Code" },
+            'Google Play': [
+                { id: 'gp100', type: '₹100', points: 2000, game: 'Google Play', icon: 'https://placehold.co/80x80/2D3748/FFFFFF?text=Google+Play' },
+                { id: 'gp500', type: '₹500', points: 10000, game: 'Google Play', icon: 'https://placehold.co/80x80/2D3748/FFFFFF?text=Google+Play' }
             ],
-            "Amazon": [
-                { coins: 300, redeem: 30, type: "Gift Card" },
-                { coins: 600, redeem: 60, type: "Gift Card" },
-                { coins: 1200, redeem: 120, type: "Gift Card" },
+            'Free Fire': [
+                { id: 'ff100', type: '100 हीरे', points: 1500, game: 'Free Fire', icon: 'https://placehold.co/80x80/2D3748/FFFFFF?text=Free+Fire' },
+                { id: 'ff500', type: '500 हीरे', points: 7500, game: 'Free Fire', icon: 'https://placehold.co/80x80/2D3748/FFFFFF?text=Free+Fire' }
             ]
         };
 
-        document.querySelectorAll('.withdraw-option-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const game = btn.dataset.game;
-                const gameOffers = offers[game];
-                
-                document.getElementById('offer-title').textContent = `${game} ऑफ़र`;
-                
-                const container = document.getElementById('offers-container');
-                container.innerHTML = ''; 
-                
-                gameOffers.forEach(offer => {
-                    const card = document.createElement('div');
-                    card.className = 'offer-card text-center';
-                    card.innerHTML = `
-                        <p class="text-3xl font-bold text-yellow-400">₹${offer.redeem}</p>
-                        <p class="text-lg">${offer.type}</p>
-                        <p class="mt-4 bg-gray-900 inline-block px-4 py-1 rounded-full text-sm">${offer.coins} कॉइंस</p>
-                    `;
-                    card.addEventListener('click', () => handleOfferClick(offer, game));
-                    container.appendChild(card);
-                });
-                showScreen('offer-screen');
+        const showScreen = (screenId, isMain = false) => {
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+                if (screen.style) {
+                    screen.style.display = 'none';
+                }
             });
+            const screenToShow = screens[screenId];
+            if (screenToShow) {
+                screenToShow.style.display = 'flex';
+                setTimeout(() => {
+                    screenToShow.classList.add('active');
+                }, 10);
+            }
+        };
+
+        const showModal = (modalId) => {
+            const modal = modals[modalId];
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        };
+
+        const hideModals = () => {
+            Object.values(modals).forEach(modal => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+        };
+
+        const showMessageModal = (title, body, onClose, type = 'info') => {
+            dom.messageTitle.textContent = title;
+            dom.messageBody.textContent = body;
+            dom.messageCloseButton.onclick = () => {
+                hideModals();
+                if (onClose) {
+                    onClose();
+                }
+            };
+            showModal('message-modal');
+        };
+
+        // उपयोगकर्ता डेटा को लोड या इनिशियलाइज़ करने का फंक्शन
+        const loadUserData = async () => {
+            showScreen('loading-screen');
+            try {
+                const docRef = doc(db, `artifacts/${appId}/users/${firestoreUserId}/data`, 'userProfile');
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    userPoints = data.points || 0;
+                    console.log("User data loaded:", data);
+                } else {
+                    await setDoc(docRef, { points: 0, createdAt: serverTimestamp() });
+                    userPoints = 0;
+                    console.log("New user profile created.");
+                }
+                dom.userPointsElement.textContent = userPoints;
+            } catch (error) {
+                console.error("Error loading user data:", error);
+                showMessageModal("त्रुटि", "उपयोगकर्ता डेटा लोड करने में त्रुटि। कृपया पुनः प्रयास करें।", null, 'error');
+            } finally {
+                showScreen('home-screen');
+            }
+        };
+
+        // अंक अपडेट करने का फंक्शन
+        const updatePoints = async (amount) => {
+            try {
+                const userDocRef = doc(db, `artifacts/${appId}/users/${firestoreUserId}/data`, 'userProfile');
+                await updateDoc(userDocRef, {
+                    points: userPoints + amount
+                });
+                userPoints += amount;
+                dom.userPointsElement.textContent = userPoints;
+            } catch (error) {
+                console.error("Error updating points:", error);
+            }
+        };
+        
+        // ऑफ़र कार्ड्स को डायनामिक रूप से रेंडर करने का फंक्शन
+        const renderOffers = (offersData, containerId, gameName) => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            offersData.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'offer-card flex flex-col items-center p-4 bg-[#2D3748] rounded-xl text-center';
+                card.innerHTML = `
+                    <img src="${offer.icon}" alt="${offer.game} Icon" class="w-20 h-20 mb-2">
+                    <h3 class="font-semibold text-lg">${offer.type}</h3>
+                    <p class="text-sm text-gray-400">आवश्यक: ${offer.points} अंक</p>
+                    <button class="claim-offer-button mt-2 py-1 px-4 bg-[#6366F1] text-white rounded-md text-sm hover:bg-[#4F46E5]" data-offer-id="${offer.id}">दावा करें</button>
+                `;
+                card.onclick = () => {
+                    currentOffer = offer;
+                    dom.offerPointsRequired.textContent = offer.points;
+                    showScreen('offer-screen');
+                };
+                container.appendChild(card);
+            });
+        };
+
+        // इवेंट लिसनर्स
+        authPromise.then(() => {
+            isAuthReady = true;
+            loadUserData();
         });
         
-        function handleOfferClick(offer, game) {
-            if (!userData) {
-                showMessageModal("लॉग इन आवश्यक", "ऑफर्स का उपयोग करने के लिए आपको लॉग इन होना चाहिए।", null, 'error');
-                return;
-            }
-            if (userData.coins >= offer.coins) {
-                currentOffer = { ...offer, game };
-                document.getElementById('uid-modal-title').textContent = `${game} के लिए अपना विवरण दर्ज करें`;
-                document.getElementById('uid-input').placeholder = game === "Google Play" ? "अपना ईमेल यहां दर्ज करें" : "अपना फ़ोन नंबर/ईमेल यहां दर्ज करें";
-                modalContainer.classList.add('active');
-                document.getElementById('uid-modal').classList.remove('hidden');
-                document.getElementById('message-modal').classList.add('hidden');
-            } else {
-                showMessageModal("अपर्याप्त कॉइंस", "आपके पास इस ऑफर के लिए पर्याप्त कॉइंस नहीं हैं।", null, 'error');
-            }
-        }
-        
-        document.getElementById('uid-cancel-btn').addEventListener('click', hideModals);
-        
-        document.getElementById('uid-submit-btn').addEventListener('click', async () => {
-            const detailInput = document.getElementById('uid-input').value.trim();
-            if (detailInput === '') {
-                showToast("कृपया एक मान्य विवरण दर्ज करें।", 3000, 'error');
-                return;
-            }
-            
-            if (!currentOffer || !userId) {
-                showToast("त्रुटि: ऑफर या उपयोगकर्ता ID गायब है।", 3000, 'error');
-                return;
-            }
+        dom.startButton.addEventListener('click', () => showScreen('home-screen'));
 
+        dom.claimButton.addEventListener('click', () => showScreen('rewards-screen'));
+
+        dom.backToHomeButton.addEventListener('click', () => showScreen('home-screen'));
+
+        dom.backFromWithdrawal.addEventListener('click', () => {
+            showScreen('rewards-screen');
+            currentOffer = null;
+        });
+
+        dom.backToRewardsButton.addEventListener('click', () => showScreen('rewards-screen'));
+        
+        dom.googlePlayCard.addEventListener('click', () => {
+            dom.rewardsTitle.textContent = "Google Play रिवॉर्ड्स";
+            dom.googlePlayOffers.style.display = 'grid';
+            dom.freeFireOffers.style.display = 'none';
+            renderOffers(offers['Google Play'], 'google-play-offers', 'Google Play');
+            showScreen('rewards-screen');
+        });
+        
+        dom.freeFireCard.addEventListener('click', () => {
+            dom.rewardsTitle.textContent = "Free Fire रिवॉर्ड्स";
+            dom.googlePlayOffers.style.display = 'none';
+            dom.freeFireOffers.style.display = 'grid';
+            renderOffers(offers['Free Fire'], 'free-fire-offers', 'Free Fire');
+            showScreen('rewards-screen');
+        });
+
+        // वीडियो देखने का इवेंट
+        dom.watchAdButton.addEventListener('click', () => {
+            const video = dom.videoPlayer;
+            video.src = video.querySelector('source').src;
+            showModal('video-player-modal');
+            video.play();
+        });
+        
+        dom.videoCloseButton.addEventListener('click', () => {
+            dom.videoPlayer.pause();
+            dom.videoPlayer.currentTime = 0;
             hideModals();
-            showToast("आपके अनुरोध पर कार्रवाई हो रही है...", 4000, 'info');
+        });
 
-            const userRef = doc(db, "users", userId); 
-            const withdrawalsRef = collection(db, "withdrawals");
+        dom.videoPlayer.addEventListener('ended', () => {
+            hideModals();
+            if (currentOffer) {
+                if (userPoints >= currentOffer.points) {
+                    showMessageModal("पर्याप्त अंक", "आप इस रिवॉर्ड को निकाल सकते हैं। 'रिवॉर्ड निकालें' बटन पर क्लिक करें।", () => {
+                        showScreen('withdrawal-screen');
+                        dom.withdrawalTitle.textContent = `${currentOffer.game} के लिए निकासी`;
+                        dom.withdrawalDetailContainer.innerHTML = '';
+                        if (currentOffer.game === 'Google Play') {
+                            dom.withdrawalDetailContainer.innerHTML = `
+                                <input id="uid-input" type="email" placeholder="अपना ईमेल दर्ज करें" class="w-full p-3 rounded-lg bg-[#2D3748] text-[#E0E7FF] border border-[#4A5568] focus:outline-none focus:ring-2 focus:ring-[#6366F1]">
+                            `;
+                        } else if (currentOffer.game === 'Free Fire') {
+                            dom.withdrawalDetailContainer.innerHTML = `
+                                <input id="uid-input" type="text" placeholder="अपनी Free Fire UID दर्ज करें" class="w-full p-3 rounded-lg bg-[#2D3748] text-[#E0E7FF] border border-[#4A5568] focus:outline-none focus:ring-2 focus:ring-[#6366F1]">
+                            `;
+                        }
+                    });
+                } else {
+                    const pointsToAdd = Math.floor(Math.random() * 50) + 10;
+                    updatePoints(pointsToAdd);
+                    showMessageModal("सफलता", `आपने वीडियो देखने के लिए ${pointsToAdd} अंक अर्जित किए!`, () => {
+                        showScreen('home-screen');
+                    });
+                }
+            } else {
+                showScreen('home-screen');
+            }
+        });
+
+        dom.submitWithdrawalButton.addEventListener('click', async () => {
+            const detailInput = document.getElementById('uid-input').value.trim();
+            if (!detailInput) {
+                showMessageModal("त्रुटि", "कृपया अपना विवरण दर्ज करें।");
+                return;
+            }
+
+            if (userPoints < currentOffer.points) {
+                showMessageModal("त्रुटि", "आपके पास इस रिवॉर्ड को निकालने के लिए पर्याप्त अंक नहीं हैं।");
+                return;
+            }
 
             try {
-                if (userData.coins < currentOffer.coins) {
-                    showMessageModal("त्रुटि", "आपके पास इस ऑफ़र के लिए पर्याप्त कॉइंस नहीं हैं।", null, 'error');
-                    return;
-                }
+                await updatePoints(-currentOffer.points);
 
-                await updateDoc(userRef, {
-                    coins: increment(-currentOffer.coins)
-                });
-
-                await addDoc(withdrawalsRef, {
-                    userId: userId,
+                // Firestore में निकासी अनुरोध सहेजें
+                const withdrawalsCollectionRef = collection(db, `artifacts/${appId}/public/data`, 'withdrawals');
+                await addDoc(withdrawalsCollectionRef, {
+                    userId: firestoreUserId,
                     game: currentOffer.game,
                     offer: currentOffer,
                     withdrawalDetail: detailInput,
