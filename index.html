@@ -2,22 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VideoJS VAST Ad Player</title>
-
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
-
-  <!-- Video.js JS -->
-  <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
-
-  <!-- Google IMA SDK (for VAST ads) -->
-  <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
-
-  <!-- Video.js IMA Plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-ads@6.9.0/dist/videojs-contrib-ads.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/videojs-ima@1.10.0/dist/videojs.ima.min.js"></script>
-
+  <title>Fluid Player VAST Ads Example</title>
+  <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
   <style>
     body {
       background: #000;
@@ -26,7 +12,7 @@
       justify-content: center;
       height: 100vh;
     }
-    .video-js {
+    video {
       width: 800px;
       height: 450px;
     }
@@ -34,31 +20,62 @@
 </head>
 <body>
 
-  <video
-    id="my-video"
-    class="video-js vjs-default-skin"
-    controls
-    preload="auto"
-    poster=""
-    data-setup="{}"
-  >
-    <source src="video.mp4" type="video/mp4" />
+  <video id="video-id" controls preload="auto">
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
   </video>
 
   <script>
-    // Initialize Video.js player
-    var player = videojs('my-video');
-
-    // Initialize IMA plugin with your VAST ad tag
-    player.ima({
-      id: 'my-video',
-      adTagUrl: 'https://youradexchange.com/video/select.php?r=10576062'
-    });
-
-    // Start playback and ad request
-    player.ready(function() {
-      player.ima.initializeAdDisplayContainer();
-      player.play();
+    var myFP = fluidPlayer('video-id', {
+      layoutControls: {
+        controlBar: {
+          autoHideTimeout: 3,
+          animated: true,
+          autoHide: true
+        },
+        htmlOnPauseBlock: {
+          html: null,
+          height: null,
+          width: null
+        },
+        autoPlay: false,
+        mute: true,
+        allowTheatre: true,
+        playPauseAnimation: false,
+        playbackRateEnabled: false,
+        allowDownload: false,
+        playButtonShowing: true,
+        fillToContainer: false,
+        posterImage: ""
+      },
+      vastOptions: {
+        adList: [
+          {
+            roll: "preRoll",
+            vastTag: "https://youradexchange.com/video/select.php?r=10576062",
+            adText: "Your ad will start soon..."
+          },
+          {
+            roll: "midRoll",
+            vastTag: "https://youradexchange.com/video/select.php?r=10576062",
+            timer: "10",
+            adText: "Mid-roll ad"
+          },
+          {
+            roll: "postRoll",
+            vastTag: "https://youradexchange.com/video/select.php?r=10576062",
+            adText: "Ad before video ends"
+          },
+          {
+            roll: "onPauseRoll",
+            vastTag: "https://youradexchange.com/video/select.php?r=10576062",
+            adText: "Paused ad"
+          }
+        ],
+        skipButtonCaption: "Skip Ad in [seconds]",
+        skipButtonClickCaption: "Skip Ad »",
+        adCTAText: false,
+        adCTATextPosition: ""
+      }
     });
   </script>
 
