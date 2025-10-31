@@ -1,49 +1,55 @@
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>make free app arvind bishnoi</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VAST Ad Player</title>
+
+  <!-- Video.js CSS -->
+  <link href="https://vjs.zencdn.net/7.21.1/video-js.css" rel="stylesheet" />
+
+  <!-- VideoJS IMA Plugin CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/6.9.0/videojs-contrib-ads.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/1.7.0/videojs.ima.css" rel="stylesheet" />
+
   <style>
-    /* Basic Reset */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: auto; /* scroll allowed */
-      font-family: Arial, sans-serif;
-      background-color: #000;
-    }
-
-    /* Iframe container */
-    .iframe-container {
-      position: relative;
-      width: 100%;
-      min-height: 100vh; /* full screen height */
-      overflow: visible; /* allow content scroll */
-    }
-
-    iframe {
-      width: 100%;
-      min-height: 100vh; /* adjust height automatically */
-      border: none;
-      display: block;
-    }
-
-    /* Optional Loading Text */
-    .loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      z-index: 10;
-    }
+    body { background: #111; color: white; text-align: center; }
+    .video-container { max-width: 720px; margin: 40px auto; }
   </style>
+</head>
+<body>
 
+  <h2>🎬 VAST In-stream Ad Player</h2>
 
-
-  <div class="iframe-container">
-    <div class="loading" id="loading">bhai logo me prakat ho rha hu...</div>
-    <iframe src="https://e065j9uem9w0-deploy.space.z.ai/" onload="document.getElementById('loading').style.display='none'">
-    </iframe>
+  <div class="video-container">
+    <video
+      id="my-video"
+      class="video-js vjs-default-skin"
+      controls
+      preload="auto"
+      width="720"
+      height="405"
+      poster="https://vjs.zencdn.net/v/oceans.png"
+      data-setup="{}"
+    >
+      <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+    </video>
   </div>
+
+  <!-- Video.js -->
+  <script src="https://vjs.zencdn.net/7.21.1/video.min.js"></script>
+
+  <!-- IMA Plugin -->
+  <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/6.9.0/videojs-contrib-ads.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/1.7.0/videojs.ima.min.js"></script>
+
+  <script>
+    const player = videojs('my-video');
+    player.ima({
+      adTagUrl: "https://youradexchange.com/video/select.php?r=10576014"
+    });
+  </script>
+
+</body>
+</html>
