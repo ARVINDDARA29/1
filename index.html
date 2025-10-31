@@ -1,53 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VAST Ad Player</title>
-
-  <!-- Video.js CSS -->
-  <link href="https://vjs.zencdn.net/7.21.1/video-js.css" rel="stylesheet" />
-
-  <!-- VideoJS IMA Plugin CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/6.9.0/videojs-contrib-ads.css" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/1.7.0/videojs.ima.css" rel="stylesheet" />
-
-  <style>
-    body { background: #111; color: white; text-align: center; }
-    .video-container { max-width: 720px; margin: 40px auto; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAST Ad Test - Fluid Player</title>
+  <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>
 </head>
 <body>
 
-  <h2>🎬 VAST In-stream Ad Player</h2>
-
-  <div class="video-container">
-    <video
-      id="my-video"
-      class="video-js vjs-default-skin"
-      controls
-      preload="auto"
-      width="720"
-      height="405"
-      poster="https://vjs.zencdn.net/v/oceans.png"
-      data-setup="{}"
-    >
-      <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
-    </video>
-  </div>
-
-  <!-- Video.js -->
-  <script src="https://vjs.zencdn.net/7.21.1/video.min.js"></script>
-
-  <!-- IMA Plugin -->
-  <script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-ads/6.9.0/videojs-contrib-ads.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-ima/1.7.0/videojs.ima.min.js"></script>
+  <video id="video-id" controls preload="auto" width="640" height="360">
+    <source src="video.mp4" type="video/mp4">
+  </video>
 
   <script>
-    const player = videojs('my-video');
-    player.ima({
-      adTagUrl: "https://youradexchange.com/video/select.php?r=10576014"
+    var myFP = fluidPlayer('video-id', {
+      layoutControls: {
+        controlBar: {
+          autoHideTimeout: 3,
+          animated: true,
+        },
+        timelinePreview: {
+          file: ""
+        },
+      },
+      vastOptions: {
+        adList: [
+          {
+            roll: 'preRoll', // preroll ad
+            vastTag: 'https://youradexchange.com/video/select.php?r=10576062',
+            adText: 'Your Ad will begin shortly...'
+          }
+        ],
+        skipButtonCaption: "Skip Ad in [seconds]",
+        skipButtonClickCaption: "Skip Ad »",
+      }
     });
   </script>
 
